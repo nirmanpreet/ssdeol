@@ -253,18 +253,25 @@ tags: false
   </div>
 </section>
 
-{% if drafts | length %}
-<section class="section">
-  <div class="wrap">
-    <div class="notice">
-      <p><strong>Note for the site owner:</strong> you have
-      {{ drafts | length }} project file(s) in <code>_content/projects/</code>
-      still marked <code>draft: true</code>. Change that to
-      <code>draft: false</code> once the details and photos are ready, and the
-      project will appear above automatically.</p>
-    </div>
+{# ==========================================================================
+   DRAFT PROJECTS
+   Drafts are hidden from visitors (they never appear above), but the site owner
+   needs to know one is sitting there waiting.
+
+   This renders ONLY when the site is running on localhost — never on the live
+   site. That matters: an earlier version of this block rendered unconditionally
+   and leaked "_content/projects/", "draft: true" and a "note for the site owner"
+   message to the public. Never put build/authoring notes in visible markup.
+   ========================================================================== #}
+{% if drafts | length and isLocal %}
+<div class="wrap" style="padding-top:1.5rem">
+  <div class="notice">
+    <p><strong>Site owner:</strong> {{ drafts | length }} project
+    file(s) in <code>_content/projects/</code> still marked
+    <code>draft: true</code>. Set it to <code>draft: false</code> once the
+    details and photos are ready and it will appear above.</p>
   </div>
-</section>
+</div>
 {% endif %}
 
 {% include "partials/cta.njk" %}

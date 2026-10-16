@@ -105,6 +105,9 @@ export default function (eleventyConfig) {
     return out;
   });
 
+  // Template helpers that must never appear on the live site.
+  eleventyConfig.addGlobalData('isLocal', process.env.ELEVENTY_RUN_MODE === 'serve' || !!process.env.LOCAL_BUILD);
+
   // Project files live in _content/projects/*.md and become individual pages.
   // `tags: project` is what lets /projects/ collect them and render the gallery.
   eleventyConfig.addCollection('projects', (api) =>
