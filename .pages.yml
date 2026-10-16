@@ -1,0 +1,324 @@
+# =============================================================================
+#  PAGES CMS CONFIGURATION
+# =============================================================================
+#  WHAT THIS IS
+#  Pages CMS is a free, open-source editing interface that writes to this
+#  repository. It gives you forms, dropdowns and drag-and-drop photo upload
+#  instead of raw files. You get a screen that looks like a normal website
+#  editor; the site rebuilds itself afterwards exactly as before.
+#
+#  IT IS COMPLETELY OPTIONAL.
+#  Deleting this one file removes the CMS and changes nothing else. Everything
+#  can still be edited on GitHub — see MAINTENANCE.md.
+#
+#  TO USE IT
+#    1. Go to https://app.pagescms.org
+#    2. Sign in with GitHub and install the Pages CMS GitHub App
+#    3. Allow it access to ONLY this repository (nirmanpreet/ssdeol)
+#    4. Pick the ssdeol repository — it opens this file and builds the editor
+#
+#  SECURITY NOTE — worth understanding once
+#    Pages CMS signs in with your own GitHub account. It can only do what you
+#    can already do — it has no special power. It is a third party, though, so
+#    grant it access to this ONE repository only, not all of them. If you ever
+#    stop using it, revoke it at
+#    github.com/settings/connections/applications
+# =============================================================================
+
+media:
+  # Uploaded photos land here — the same folder MAINTENANCE.md tells you to use,
+  # so nothing changes whether you upload through the CMS or GitHub.
+  input: assets/img/projects
+  output: /assets/img/projects
+  # Don't silently rename files; keep the names people can recognise.
+  rename: none
+  # Photographs only. A 12 MB PDF would be rejected rather than committed.
+  categories: [image]
+  extensions: [jpg, jpeg, png, webp, avif]
+
+content:
+  # ---------------------------------------------------------------- PROJECTS
+  # The highest-value thing to have in a CMS. Create a project, drop in the
+  # photos, done. The gallery, filters and before/after slider switch on by
+  # themselves when draft is turned off.
+  - name: projects
+    label: Projects
+    type: collection
+    path: _content/projects
+    filename: "{primary}.md"
+    view: list
+    create: true
+    subfolder: false
+    fields:
+      - name: title
+        label: Project title
+        type: string
+        required: true
+        hint: e.g. Footscray Warehouse Repaint
+
+      - name: draft
+        label: Draft (not visible on the website)
+        type: boolean
+        default: true
+        required: false
+        hint: Leave this ON while you are writing it. Turn it OFF to publish.
+
+      - name: completed
+        label: Completed
+        type: string
+        required: true
+        hint: Just the year and month, e.g. 2026-09
+        editors:
+          - type: date
+
+      - name: location
+        label: Suburb and state
+        type: string
+        required: true
+
+      - name: sector
+        label: Sector
+        type: select
+        options:
+          - Warehouse / Distribution
+          - Factory / Manufacturing
+          - Office / Commercial
+          - Retail / Shopfront
+          - Strata / Body Corporate
+          - School / Childcare
+          - Aged Care
+          - Hospitality
+          - Transport Depot
+          - Utility / Energy
+
+      - name: tags
+        label: Filter tags
+        type: select
+        multiple: true
+        required: true
+        hint: Drives the filter buttons on the Projects page.
+        options:
+          - warehouse
+          - factory
+          - floor-coating
+          - line-marking
+          - exterior
+          - office
+          - repairs
+
+      - name: excerpt
+        label: Short summary
+        type: text
+        required: true
+        hint: Two or three sentences. This is what people read in the gallery.
+
+      - name: hero
+        label: Main photo
+        type: image
+        required: false
+
+      - name: before
+        label: Before photo (before/after slider)
+        type: image
+        required: false
+
+      - name: after
+        label: After photo (before/after slider)
+        type: image
+        required: false
+
+      - name: description
+        label: Description for Google
+        type: text
+        required: true
+        hint: One sentence. What, where, and the result.
+
+      - name: body
+        label: Full write-up
+        type: rich-text
+
+  # --------------------------------------------------------- SITE SETTINGS
+  # The phone number lives here. Changing it here changes every call button,
+  # the header, the footer and the contact page at once.
+  - name: site
+    label: Site settings (phone, email, address)
+    type: file
+    path: _content/_data/site.yml
+    fields:
+      - name: name
+        type: string
+        label: Short name
+      - name: legalName
+        type: string
+        label: Registered company name
+      - name: abn
+        type: string
+        label: ABN
+      - name: tagline
+        type: string
+        label: Tagline
+      - name: phone
+        type: string
+        label: Mobile number
+        hint: Used by every "Call now" button.
+      - name: phoneDisplay
+        type: string
+        label: Mobile number (as people read it)
+      - name: landline
+        type: string
+        label: Landline
+        hint: Leave blank to hide it everywhere.
+      - name: email
+        type: string
+        label: Enquiry email address
+      - name: addressLine1
+        type: string
+        label: Street address
+      - name: suburb
+        type: string
+        label: Suburb
+      - name: state
+        type: string
+        label: State
+      - name: postcode
+        type: string
+        label: Postcode
+      - name: accessKey
+        type: string
+        label: Quote form access key
+        hint: From web3forms.com. Only change this if you re-register the form.
+      - name: hours
+        type: object
+        label: Opening hours
+        fields:
+          - name: weekdays
+            type: string
+            label: Weekdays
+          - name: weekends
+            type: string
+            label: Weekends
+          - name: emergency
+            type: string
+            label: Emergency / after hours
+
+  # ------------------------------------------------------------- SERVICES
+  # The nine service cards. Titles and one-line summaries only — the long
+  # write-ups for each service live in their own files and are safer to edit
+  # on GitHub, where the formatting is visible.
+  - name: services
+    label: Services list
+    type: file
+    path: _content/_data/services.yml
+    fields:
+      - name: services
+        type: block
+        label: Services
+        field:
+          type: object
+          fields:
+            - name: slug
+              type: string
+              label: Web address
+              hint: Lower case with hyphens, e.g. epoxy-floor-coatings
+            - name: title
+              type: string
+              label: Title
+            - name: short
+              type: text
+              label: One-line summary for the card
+            - name: icon
+              type: select
+              label: Icon
+              options: [roller, floor, lines, spray, steel, rope, build, repair, calendar]
+      - name: industries
+        type: select
+        label: Industries served
+        multiple: true
+        options:
+          - Warehouses & Distribution
+          - Factories & Manufacturing
+          - Offices & Corporate
+          - Retail & Shopfronts
+          - Strata & Body Corporate
+          - Schools & Childcare
+          - Aged Care
+          - Hospitality & Restaurants
+          - Transport Depots
+          - Utility & Energy Sites
+
+  # ---------------------------------------------------------- CREDENTIALS
+  # Insurance, accreditations and the numbers shown in the green bar.
+  - name: credentials
+    label: Credentials
+    type: file
+    path: _content/_data/credentials.yml
+    fields:
+      - name: credentials
+        type: block
+        label: Credentials
+        field:
+          type: object
+          fields:
+            - name: label
+              type: string
+              label: Name
+            - name: value
+              type: string
+              label: Value
+            - name: note
+              type: text
+              label: Explanation
+      - name: trustBar
+        type: block
+        label: The four big numbers
+        field:
+          type: object
+          fields:
+            - name: value
+              type: string
+              label: Number
+            - name: label
+              type: string
+              label: Caption
+
+  # ----------------------------------------------------- SERVICE AREAS / NAV
+  - name: areas
+    label: Service areas
+    type: file
+    path: _content/_data/nav.yml
+    fields:
+      - name: serviceAreas
+        type: object
+        label: Areas we cover
+        fields:
+          - name: metro
+            type: select
+            label: Melbourne metro
+            multiple: true
+            options:
+              - Altona North & Deer Park
+              - Footscray & Williamstown
+              - Laverton & Truganina
+              - Brooklyn & Campbellfield
+              - Dandenong & Cranbourne
+              - Cheltenham & Braeside
+              - Melbourne CBD & Southbank
+              - Broadmeadows & Thomastown
+              - Rowville & Knoxfield
+              - Moorabbin & Clayton
+          - name: regional
+            type: select
+            label: Regional Victoria
+            multiple: true
+            options:
+              - Geelong & the Bellarine
+              - Ballarat
+              - Bendigo
+              - Latrobe Valley
+              - Mornington Peninsula
+              - Macedon Ranges
+
+settings:
+  # Every save becomes a normal git commit, so the History button still lets you
+  # roll anything back — same safety net as editing on GitHub.
+  merge_mode: overwrite
