@@ -1,0 +1,97 @@
+# ==============================================================================
+#  SITE-WIDE SETTINGS  —  this is the file you edit most often
+# ==============================================================================
+#  HOW TO EDIT THIS FILE ON GITHUB (no software needed):
+#    1. Open this file on github.com
+#    2. Click the pencil icon (top right)
+#    3. Change the text
+#    4. Scroll down, click the green "Commit changes" button
+#    5. Wait ~1 minute, then refresh your website — the change is live.
+#
+#  EVERYTHING IN THIS FILE APPEARS ON MANY PAGES AT ONCE.
+#  Change the phone number HERE, not on individual pages.
+# ==============================================================================
+
+# --- WHO WE ARE ---------------------------------------------------------------
+name: SS Deol                    # Short name, used in the header and page titles
+legalName: SS DEOL ENTERPRISES PTY LTD
+tradingSince: 2015
+abn: 99 639 811 564              # Australian Business Number — verified active
+acn: 639 811 564
+
+tagline: Commercial & Industrial Painting
+shortDescription: >-
+  Family-owned commercial and industrial painting contractors working across
+  Victoria since 2015.
+
+# --- CONTACT DETAILS ----------------------------------------------------------
+# !! REPLACE EVERY [PLACEHOLDER] BELOW BEFORE LAUNCHING !!
+# See TO-FILL-IN-BEFORE-LAUNCH.md for the full list.
+
+# Your main mobile number. This is the number the big "Call now" button uses.
+phone: "[PLACEHOLDER: 0400 000 000]"
+# Formatted for people to read. If you set phone above correctly, this auto-fills.
+# Only edit this if your display format differs.
+phoneDisplay: "[PLACEHOLDER: 0400 000 000]"
+
+# Optional landline / office number. Set to "" to hide it everywhere.
+landline: ""
+
+# Where enquiries land.
+email: "[PLACEHOLDER: quotes@ssdeol.com.au]"
+
+# Street address shown in the footer and on the Contact page.
+# Use the real registered or trading address.
+addressLine1: "[PLACEHOLDER: Street address]"
+suburb: "[PLACEHOLDER: Suburb]"
+state: VIC
+postcode: "3024"
+
+# --- OPENING HOURS -----------------------------------------------------------
+# Set showHours to false if you would rather not publish hours.
+showHours: true
+hours:
+  weekdays: "[PLACEHOLDER: Mon–Fri 7:00am – 5:00pm]"
+  weekends: "[PLACEHOLDER: Saturdays by arrangement]"
+  emergency: "[PLACEHOLDER: 24/7 emergency callouts]"
+
+# --- WHAT WE PROMISE (the numbers on the "Why SS Deol" band) ------------------
+# These are hard promises. Only keep a promise you can always meet.
+promises:
+  quoteTurnaround: 48 hours      # Displayed as "Quote within {X}"
+  crewSize: 8
+  serviceArea: All of Victoria
+
+# --- SOCIAL / OTHER LINKS ---------------------------------------------------
+# Leave blank ("") to hide. Do not invent profiles — empty means hidden.
+social:
+  facebook: ""
+  instagram: ""
+  linkedin: ""
+
+# --- SEO DEFAULTS -----------------------------------------------------------
+# Used on any page that does not set its own description.
+defaultMetaDescription: >-
+  SS Deol is a family-owned commercial and industrial painting contractor
+  working across Victoria since 2015. $10 million public liability, Dulux
+  Accredited, quotes within 48 hours, and after-hours and shutdown work so
+  your operation keeps running.
+# --- QUOTE FORM --------------------------------------------------------------
+# GitHub Pages is a static host: it cannot receive form submissions. We send
+# them to a free third-party service instead.
+#
+# WHAT TO DO: sign up at https://web3forms.com using the enquiry email address.
+# It emails you an Access Key. Paste that key below. Nothing else to do.
+#
+# TO CHANGE THE DESTINATION EMAIL LATER: do it in the Web3Forms dashboard.
+# You do NOT need to touch this file or any code.
+accessKey: "[PLACEHOLDER: paste your Web3Forms access key here]"
+
+# --- SEO DEFAULTS -----------------------------------------------------------
+# The live web address. Used for canonical tags, Open Graph links and schema.
+# !! Change this once the domain is live. Until then it can stay as-is —
+#    nothing breaks; it only affects what gets shown when a link is shared.
+url: "https://ssdeol.com.au"
+
+# Used in the page <title> suffix, e.g. "Epoxy Floor Coatings | SS Deol"
+titleSuffix: SS Deol

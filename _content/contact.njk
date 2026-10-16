@@ -1,0 +1,255 @@
+---
+layout: layouts/base.njk
+permalink: /contact/index.html
+title: Get a Quote
+description: >-
+  Request a commercial or industrial painting quote from SS Deol. Written quotes
+  within 48 hours, after-hours and shutdown work across Victoria. Or call us
+  directly.
+---
+
+<section class="page-hero">
+  {% include "partials/breadcrumbs.njk" %}
+  <div class="wrap">
+    <p class="eyebrow">Get a quote</p>
+    <h1>Tell us about the job</h1>
+    <p class="lede">
+      The more you can tell us, the more accurate the quote. Photos of the
+      surfaces are genuinely useful — a phone snap of the problem area saves a
+      site visit and gets you a firmer price. We answer every enquiry within
+      48 hours.
+    </p>
+  </div>
+</section>
+<section class="section">
+  <div class="wrap split split--start">
+
+    {# ============================================================ THE FORM == #}
+    <div>
+      <div class="notice" style="margin-bottom:2rem">
+        <p><strong>Prefer to talk?</strong> Call
+          <a href="tel:{{ site.phone | tel }}">{{ site.phoneDisplay }}</a>
+          {{ site.hours.emergency | lower }}. If the form below is not working,
+          call or email — we lose far fewer enquiries than websites suggest.</p>
+      </div>
+
+      <h2 style="font-size:var(--step-3)">Quote request</h2>
+
+      <form class="form"
+            action="https://api.web3forms.com/submit"
+            method="POST"
+            novalidate
+            data-quote-form
+            data-phone="{{ site.phone | tel }}"
+            data-email="{{ site.email }}">
+
+        {# Required by Web3Forms. This key is designed to be visible in page
+           source — it is an alias to your inbox, not a password. #}
+        <input type="hidden" name="access_key" value="{{ site.accessKey }}">
+        <input type="hidden" name="subject" value="New quote request from ssdeol.com.au">
+        <input type="hidden" name="from_name" value="SS Deol Website">
+
+        {# --- spam trap: hidden from people, filled in by naive bots --- #}
+        <div class="hp" aria-hidden="true">
+          <label for="company_website">Leave this field empty</label>
+          <input type="text" id="company_website" name="botcheck" tabindex="-1" autocomplete="off">
+        </div>
+        <div class="form__row">
+          <div class="field">
+            <label for="f-name">Your name <span class="req" aria-hidden="true">*</span></label>
+            <input type="text" id="f-name" name="name" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="f-company">Company</label>
+            <input type="text" id="f-company" name="company" autocomplete="organization">
+          </div>
+        </div>
+        <div class="form__row">
+          <div class="field">
+            <label for="f-phone">Phone <span class="req" aria-hidden="true">*</span></label>
+            <input type="tel" id="f-phone" name="phone" autocomplete="tel" required>
+            <p class="hint">Mobile preferred — we often ask before we arrive.</p>
+          </div>
+          <div class="field">
+            <label for="f-email">Email <span class="req" aria-hidden="true">*</span></label>
+            <input type="email" id="f-email" name="email" autocomplete="email" required>
+            <p class="hint">This is where the written quote goes.</p>
+          </div>
+        </div>
+        <div class="form__row">
+          <div class="field">
+            <label for="f-suburb">Suburb / site address <span class="req" aria-hidden="true">*</span></label>
+            <input type="text" id="f-suburb" name="suburb" required>
+          </div>
+          <div class="field">
+            <label for="f-property">Type of property</label>
+            <select id="f-property" name="property_type">
+              <option value="">Please choose…</option>
+              <option>Warehouse / distribution centre</option>
+              <option>Factory / manufacturing</option>
+              <option>Office / commercial</option>
+              <option>Retail / shopfront</option>
+              <option>Strata / body corporate</option>
+              <option>School / childcare</option>
+              <option>Aged care</option>
+              <option>Hospitality</option>
+              <option>Transport depot</option>
+              <option>Utility / energy site</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form__row">
+          <div class="field">
+            <label for="f-service">Service needed</label>
+            <select id="f-service" name="service">
+              <option value="">Not sure yet</option>
+              {%- for s in services.services -%}
+              <option>{{ s.title }}</option>
+              {%- endfor -%}
+              <option>Something else / not listed</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-size">Approximate size</label>
+            <select id="f-size" name="size">
+              <option value="">Not sure</option>
+              <option>Under 250 m²</option>
+              <option>250 – 1,000 m²</option>
+              <option>1,000 – 5,000 m²</option>
+              <option>5,000 – 15,000 m²</option>
+              <option>Over 15,000 m²</option>
+              <option>Several buildings / multiple sites</option>
+            </select>
+            <p class="hint">A rough guess is fine. If you are not sure, leave it.</p>
+          </div>
+        </div>
+        <div class="form__row">
+          <div class="field">
+            <label for="f-timing">When do you need it done?</label>
+            <select id="f-timing" name="timing">
+              <option value="">Flexible</option>
+              <option>Urgent — needs a crew ASAP</option>
+              <option>Within a month</option>
+              <option>1 – 3 months</option>
+              <option>Next financial year</option>
+              <option>Planning / budgeting only</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-hours">When can we work?</label>
+            <select id="f-hours" name="working_hours">
+              <option value="">Happy to discuss</option>
+              <option>Business hours only</option>
+              <option>After hours / evenings</option>
+              <option>Weekends</option>
+              <option>Over our shutdown period</option>
+              <option>Any of the above</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="f-message">What needs doing? <span class="req" aria-hidden="true">*</span></label>
+          <textarea id="f-message" name="message" required
+            placeholder="What the building is, what condition the surfaces are in, anything awkward about the access or the site, and anything we should know about the building's operation."></textarea>
+        </div>
+        <div class="field field--consent">
+          <input type="checkbox" id="f-consent" name="consent" required>
+          <label for="f-consent">
+            I agree that SS Deol may use these details to prepare and send a
+            quote. <span class="req" aria-hidden="true">*</span>
+            <br><span class="hint">We do not sell or share your information.
+            See our <a href="/privacy/">privacy policy</a>.</span>
+          </label>
+        </div>
+
+        {# --- result messages are injected here by assets/js/main.js --- #}
+        <div class="form__status" data-form-status role="alert" tabindex="-1"></div>
+        <div>
+          <button class="btn btn--green" type="submit" data-form-submit>
+            Send my quote request
+          </button>
+          <p class="hint" style="margin-top:.8rem">
+            We reply within 48 hours. Fields marked * are required.
+          </p>
+        </div>
+
+        {# --- Anti-spam challenge --------------------------------------------
+           Web3Forms provides hCaptcha free of charge on every plan (Google
+           reCAPTCHA and Cloudflare Turnstile are paid extras). The widget only
+           loads from the provider's own domain when someone actually uses the
+           form, so it costs nothing on ordinary page views. ----------------- #}
+        <div class="h-captcha" data-captcha="true"></div>
+        <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+      </form>
+    </div>
+
+    {# =========================================================== SIDE PANEL == #}
+    <aside>
+      <div class="plain-card" style="margin-bottom:1.5rem">
+        <h3>What happens next</h3>
+        <ol class="steps" style="margin-top:1rem">
+          <li><h3>We read it</h3><p>Usually the same day.</p></li>
+          <li><h3>We call you</h3><p>To clarify anything and book a site visit.</p></li>
+          <li><h3>We inspect the site</h3><p>Surfaces, access, light, and the things a photo cannot show.</p></li>
+          <li><h3>You get a written quote</h3><p>Within 48 hours. Itemised, no obligation.</p></li>
+        </ol>
+      </div>
+      <div class="plain-card" style="margin-bottom:1.5rem">
+        <h3>Talk to a person</h3>
+        <p style="margin-top:.6rem">
+          <a href="tel:{{ site.phone | tel }}"
+             style="font-family:var(--font-head);font-size:var(--step-2);font-weight:700;text-decoration:none;color:var(--green)">
+            {{ site.phoneDisplay }}
+          </a>
+        </p>
+        {% if site.landline %}
+        <p><a href="tel:{{ site.landline | tel }}">{{ site.landline }}</a></p>
+        {%- endif -%}
+        <p><a href="mailto:{{ site.email }}">{{ site.email }}</a></p>
+        {%- if site.showHours -%}
+        <p style="margin-top:.8rem;font-size:.92rem;color:var(--muted)">
+          {{ site.hours.weekdays }}<br>
+          {{ site.hours.weekends }}<br>
+          {{ site.hours.emergency }}
+        </p>
+        {% endif %}
+      </div>
+      <div class="plain-card">
+        <h3>Where we work</h3>
+        <p style="margin-top:.6rem">
+          All of Victoria, based out of Altona North in Melbourne's western
+          industrial corridor.
+        </p>
+        <p><a href="/service-areas/">See the areas we cover</a></p>
+      </div>
+    </aside>
+
+  </div>
+</section>
+<section class="section section--pale">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Before you send</p>
+      <h2>What makes our quote accurate</h2>
+    </div>
+    <div class="card-grid">
+      <div class="plain-card">
+        <h3>Photos of the problem area</h3>
+        <p>A phone snap is fine. Wide and close, in good light.</p>
+      </div>
+      <div class="plain-card">
+        <h3>Which areas, in which order</h3>
+        <p>Priority tells us where to start and what matters most.</p>
+      </div>
+      <div class="plain-card">
+        <h3>Your shutdown dates</h3>
+        <p>The single biggest factor in a commercial price.</p>
+      </div>
+      <div class="plain-card">
+        <h3>Access constraints</h3>
+        <p>Loading docks, lift sizes, height limits, live plant.</p>
+      </div>
+    </div>
+  </div>
+</section>

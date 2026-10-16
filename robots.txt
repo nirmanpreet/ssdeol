@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# No admin areas or internal tools exist on a static site, so there is
+# genuinely nothing to disallow.
+
+Sitemap: https://ssdeol.com.au/sitemap.xml

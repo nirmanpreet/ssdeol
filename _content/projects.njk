@@ -1,0 +1,270 @@
+---
+layout: layouts/base.njk
+permalink: /projects/index.html
+title: Projects
+description: >-
+  Commercial and industrial painting projects across Victoria — warehouses,
+  factories, tilt-up panels, epoxy floors and line marking, photographed on
+  site by the crew that did the work.
+tags: false
+---
+
+<section class="page-hero">
+  {% include "partials/breadcrumbs.njk" %}
+  <div class="wrap">
+    <p class="eyebrow">Projects</p>
+    <h1>Work we have done</h1>
+    <p class="lede">
+      Photographs of real jobs, taken on site by the crew that did the work.
+      We do not use stock photography, and we will never show you a project we
+      cannot talk you through.
+    </p>
+  </div>
+</section>
+
+{% set live = collections.projects | published %}
+{% set drafts = collections.projects | drafts %}
+
+{# ====================================================================
+   If there are no published projects yet, show the honest "coming soon"
+   notice. If there ARE published projects, show the full gallery with
+   filters, lightbox and before/after sliders.
+   This page needs no editing when you add your first project.
+   ==================================================================== #}
+
+{% if live | length == 0 %}
+
+<section class="section">
+  <div class="wrap">
+    <div class="notice">
+      <p><strong>Project photographs coming soon.</strong> We are photographing
+      completed jobs now and adding them here as they are finished.</p>
+      <p>Everything on this page is ready to go — filters, gallery and
+      before/after slider all switch on automatically the moment the first
+      project is published. If you have a job you would like quoted in the
+      meantime, we would be glad to look at it.</p>
+      <p><a href="/contact/">Send us a description of your site</a></p>
+    </div>
+  </div>
+</section>
+
+{% else %}
+
+<section class="section">
+  <div class="wrap">
+
+    {# Build the filter list from the tags actually used, so it never drifts #}
+    {% set usedTags = live | usedTags %}
+
+    {% if usedTags | length > 1 %}
+    <div class="filters" data-filters>
+      <button type="button" data-filter="all" aria-pressed="true">All</button>
+      {%- for t in usedTags -%}
+      <button type="button" data-filter="{{ t }}" aria-pressed="false">{{ t | replace("-", " ") | title }}</button>
+      {%- endfor -%}
+    </div>
+    {% endif %}
+
+    <ul class="project-grid">
+      {%- for p in live -%}
+      <li data-category="{{ p.data.tags | join(' ') }}">
+        <a class="project" href="{{ p.url }}">
+          {%- if p.data.hero -%}
+          <span class="project__media">
+            <img src="{{ p.data.hero }}" alt="{{ p.data.title }}" loading="lazy" decoding="async" width="600" height="450">
+          </span>
+          {% else %}
+          <span class="project__media">
+            <span>Photo coming soon</span>
+          </span>
+          {% endif %}
+          <span class="project__body">
+            <span class="project__meta">
+              {%- for t in p.data.tags or [] -%}
+              <span class="tag">{{ t | replace("-", " ") }}</span>
+              {%- endfor -%}
+            </span>
+            <span class="project__title">{{ p.data.title }}</span>
+            {%- if p.data.location %}<span class="project__text">{{ p.data.location }} · {{ p.data.completed }}</span>{% endif %}
+            {% if p.data.excerpt %}<span class="project__text">{{ p.data.excerpt }}</span>{% endif %}
+          </span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+
+    <p hidden data-filter-empty>No projects match that filter yet.</p>
+
+  </div>
+</section>
+
+{# ------------------------------------------- before / after comparators #}
+{% set comparisons = live | withBeforeAfter %}
+{% if comparisons | length %}
+<section class="section section--pale">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Before and after</p>
+      <h2>Drag the slider</h2>
+      <p class="lede">The same wall, the same floor, the same spot — before and
+      after. Drag the handle, or use the arrow keys.</p>
+    </div>
+
+    {% for p in comparisons %}
+    <div style="margin-bottom:2.5rem">
+      <h3 style="margin-bottom:.8rem">{{ p.data.title }} — {{ p.data.location }}</h3>
+      <div class="compare" data-compare>
+        <img data-compare-before src="{{ p.data.before }}" alt="{{ p.data.title }} before" loading="lazy" width="1200" height="750">
+        <img class="compare__after" data-compare-after src="{{ p.data.after }}" alt="{{ p.data.title }} after" loading="lazy" width="1200" height="750">
+        <span class="compare__label compare__label--before">Before</span>
+        <span class="compare__label compare__label--after">After</span>
+        <span class="compare__handle"></span>
+        <label class="visually-hidden" for="compare-{{ loop.index }}">Reveal amount for {{ p.data.title }}</label>
+        <input id="compare-{{ loop.index }}" type="range" min="0" max="100" value="50" data-compare-range>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{# ------------------------------------------------------------- lightbox #}
+{% set withPhotos = live | withHero %}
+{% if withPhotos | length %}
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Gallery</p>
+      <h2>Tap any photo to enlarge</h2>
+    </div>
+    <ul class="project-grid">
+      {%- for p in withPhotos -%}
+      <li>
+        <a href="{{ p.data.hero }}" data-lightbox data-caption="{{ p.data.title }} — {{ p.data.location }}">
+          <span class="project__media">
+            <img src="{{ p.data.hero }}" alt="{{ p.data.title }}" loading="lazy" decoding="async" width="600" height="450">
+          </span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+{% endif %}
+
+{% endif %}
+
+{# ====================================================================
+   "Project types we handle" — honest, specific content that ranks, and
+   does not depend on having photos. Always shown.
+   ==================================================================== #}
+<section class="section {% if live | length == 0 %}section--pale{% endif %}">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Project types</p>
+      <h2>The work we do, in detail</h2>
+      <p class="lede">
+        Rather than show you stock photographs dressed up as somebody else's
+        work, here is what each type of project actually involves — the
+        problems that come up, and how we handle them. If you have a similar
+        site, we will be able to tell you quickly whether it is
+        straightforward or not.
+      </p>
+    </div>
+    <ul class="card-grid">
+      <li class="plain-card">
+        <h3>Warehouse repaint over a shutdown</h3>
+        <p><strong>The job:</strong> a full interior and exterior repaint of a
+        distribution warehouse, with racking still loaded.</p>
+        <p style="margin-top:.6rem"><strong>The problem:</strong> one shutdown
+        window, no room to fail.</p>
+        <p style="margin-top:.4rem"><strong>What we do:</strong> work one bay
+        section at a time, grinding and coating the floor in sequence so the
+        building stays partly usable, and complete the walls in the same pass.</p>
+      </li>
+      <li class="plain-card">
+        <h3>Epoxy floor on a live slab</h3>
+        <p><strong>The job:</strong> replace a tired painted floor with an
+        industrial epoxy system under live forklift traffic.</p>
+        <p style="margin-top:.6rem"><strong>The problem:</strong> preparation,
+        not coating, decides how long the floor lasts.</p>
+        <p style="margin-top:.4rem"><strong>What we do:</strong> diamond grind
+        to open the concrete, repair cracks and spalls, moisture-test, then
+        prime and coat — phasing by aisle so you keep operating.</p>
+      </li>
+      <li class="plain-card">
+        <h3>Factory exterior with tilt-up panels</h3>
+        <p><strong>The job:</strong> reseal and recoat a tilt-up elevation that
+        has weathered unevenly across several previous campaigns.</p>
+        <p style="margin-top:.6rem"><strong>The problem:</strong> different
+        colours and systems on different elevations, plus failed joint sealant
+        letting water in.</p>
+        <p style="margin-top:.4rem"><strong>What we do:</strong> open and
+        reseal the panel joints, treat rust staining from fixings, and apply a
+        single consistent system across the whole elevation.</p>
+      </li>
+      <li class="plain-card">
+        <h3>Line marking on a new warehouse fit-out</h3>
+        <p><strong>The job:</strong> full warehouse layout and line marking
+        alongside a new epoxy floor.</p>
+        <p style="margin-top:.6rem"><strong>The problem:</strong> lines taped
+        over a coating peel and lift within months.</p>
+        <p style="margin-top:.4rem"><strong>What we do:</strong> mark into the
+        coating during application, so the lines wear at the same rate as the
+        floor around them.</p>
+      </li>
+      <li class="plain-card">
+        <h3>Office fit-off inside a trading building</h3>
+        <p><strong>The job:</strong> repaint office floors and amenities in a
+        building that stays occupied throughout.</p>
+        <p style="margin-top:.6rem"><strong>The problem:</strong> nobody can
+        stop working, and noise is the binding constraint.</p>
+        <p style="margin-top:.4rem"><strong>What we do:</strong> one team per
+        zone, low-VOC coatings, containment on the work face, and evenings where
+        the noise needs to be gone.</p>
+      </li>
+      <li class="plain-card">
+        <h3>Water ingress found during a repaint</h3>
+        <p><strong>The job:</strong> routine repaint that turns up failed
+        membrane and water-damaged substrate behind the cladding.</p>
+        <p style="margin-top:.6rem"><strong>The problem:</strong> the contract
+        was for painting. The wall behind it is wet.</p>
+        <p style="margin-top:.4rem"><strong>What we do:</strong> stop, show you
+        what we found, price the remediation separately, and let you decide what
+        happens next. We do not quietly paint over it.</p>
+      </li>
+    </ul>
+  </div>
+</section>
+<section class="section {% if live | length == 0 %}section--pale{% endif %}">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Sectors</p>
+      <h2>Where our projects tend to be</h2>
+    </div>
+    <ul class="chips">
+      {%- for i in services.industries -%}
+      <li>{{ i }}</li>
+      {%- endfor -%}
+    </ul>
+    <div class="btn-row" style="justify-content:center">
+      <a class="btn btn--outline" href="/service-areas/">See the areas we cover</a>
+    </div>
+  </div>
+</section>
+
+{% if drafts | length %}
+<section class="section">
+  <div class="wrap">
+    <div class="notice">
+      <p><strong>Note for the site owner:</strong> you have
+      {{ drafts | length }} project file(s) in <code>_content/projects/</code>
+      still marked <code>draft: true</code>. Change that to
+      <code>draft: false</code> once the details and photos are ready, and the
+      project will appear above automatically.</p>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% include "partials/cta.njk" %}

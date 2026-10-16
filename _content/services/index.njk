@@ -1,0 +1,86 @@
+---
+layout: layouts/base.njk
+permalink: /services/index.html
+title: Commercial & Industrial Painting Services
+description: >-
+  SS Deol's commercial and industrial painting services across Victoria — floor
+  coatings, line marking, texture coating, structural steel, rope access,
+  pre-construction, repairs and maintenance programmes.
+---
+
+<section class="page-hero">
+  {% include "partials/breadcrumbs.njk" %}
+  <div class="wrap">
+    <p class="eyebrow">What we do</p>
+    <h1>Commercial and industrial painting services</h1>
+    <p class="lede">
+      Nine service lines, one crew, one point of contact. We work days, nights,
+      weekends and shutdown periods across Victoria, and every job comes with a
+      written scope, a site-specific SWMS and a five-year warranty.
+    </p>
+  </div>
+</section>
+<section class="section">
+  <div class="wrap">
+    <h2 class="visually-hidden">All services</h2>
+    <ul class="card-grid">
+      {%- for s in services.services -%}
+      <li>
+        <a class="service-card" href="/services/{{ s.slug }}/">
+          <span class="service-card__icon">{{ icon(s.icon) }}</span>
+          <h3 class="service-card__title">{{ s.title }}</h3>
+          <p class="service-card__body">{{ s.short }}</p>
+          <span class="service-card__more">See how we do it</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+<section class="section section--pale">
+  <div class="wrap split">
+    <div>
+      <p class="eyebrow">Not sure which one you need?</p>
+      <h2>Describe it, we'll tell you</h2>
+      <p class="lede">
+        Most enquiries are not a clean fit for a single service line. "The floor
+        looks tired and the line marking has gone" is really a floor coating plus
+        line marking plus a shutdown conversation.
+      </p>
+      <div class="btn-row">
+        <a class="btn btn--green" href="/contact/">Send us a description</a>
+        <a class="btn btn--outline" href="tel:{{ site.phone | tel }}">Call {{ site.phoneDisplay }}</a>
+      </div>
+    </div>
+    <div class="prose">
+      <h3>Things people commonly ask us for together</h3>
+      <ul class="checks">
+        <li><strong>Warehouse refresh:</strong> epoxy floor + line marking + wall and column repaint, done over a shutdown.</li>
+        <li><strong>Factory exterior:</strong> tilt-up panel and structural steel coating, scaffold or rope access, with a colour you can live with for fifteen years.</li>
+        <li><strong>Office fit-off:</strong> pre-construction interior coating, two-pack finishes and joinery, sequenced around other trades.</li>
+        <li><strong>Water ingress first:</strong> we find and fix the leak or the failed membrane, then paint it. Painting over a leak just buys you a second leak.</li>
+        <li><strong>Multi-site roll-out:</strong> the same repaint programme across several buildings, staggered so the organisation is never fully disrupted.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+<section class="section section--green">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Sectors</p>
+      <h2>We paint these, and only these</h2>
+      <p>
+        We are a commercial and industrial contractor. That is not a limitation —
+        it means the crew has seen your type of building before and knows what
+        the access, the hazards and the hold-ups look like.
+      </p>
+    </div>
+    <ul class="chips">
+      {%- for i in services.industries -%}
+      <li>{{ i }}</li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{% include "partials/cta.njk" %}

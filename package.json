@@ -1,0 +1,30 @@
+{
+  "name": "ssdeol-website",
+  "version": "1.0.0",
+  "description": "SS Deol Painting — commercial & industrial painting, Victoria. Static site built with Eleventy and deployed to GitHub Pages.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "eleventy",
+    "start": "eleventy --serve",
+    "debug": "DEBUG=Eleventy* eleventy",
+    "build:logo": "node tools/build-logo.mjs",
+    "build:fonts": "node tools/build-fonts.mjs",
+    "check": "node tools/check-build.mjs",
+    "qa:visual": "node tools/qa-visual.mjs",
+    "qa:markdown": "node tools/check-markdown-mangling.mjs",
+    "fix:layout": "node tools/fix-markdown-mangling.mjs && node tools/fix-loop-whitespace.mjs"
+  },
+  "keywords": [],
+  "author": "SS Deol Enterprises Pty Ltd",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@11ty/eleventy": "^3.1.7",
+    "js-yaml": "^5.5.0",
+    "playwright": "^1.64.1",
+    "sharp": "^0.35.5"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

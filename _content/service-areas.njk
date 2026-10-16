@@ -1,0 +1,94 @@
+---
+layout: layouts/base.njk
+permalink: /service-areas/index.html
+title: Service Areas
+description: >-
+  SS Deol paints commercial and industrial sites across all of Victoria, based
+  in Altona North in Melbourne's western industrial corridor. Melbourne metro,
+        Geelong, Ballarat, Bendigo, Latrobe Valley and more.
+---
+
+<section class="page-hero">
+  {% include "partials/breadcrumbs.njk" %}
+  <div class="wrap">
+    <p class="eyebrow">Where we work</p>
+    <h1>All of Victoria</h1>
+    <p class="lede">
+      We are based in Altona North, in the middle of Melbourne's western
+      industrial corridor, and we service the whole of Victoria. For a large
+      enough job anywhere in the state, travel is rarely the deciding factor.
+    </p>
+  </div>
+</section>
+<section class="section">
+  <div class="wrap split">
+    <div>
+      <p class="eyebrow">Melbourne metro</p>
+      <h2>The metro areas we work in regularly</h2>
+      <p>
+        These are the areas we are in often enough that we know the access
+        quirks, the council parking rules and which industrial estates are
+        hardest to get a crane or boom into.
+      </p>
+    </div>
+    <ul class="chips">
+      {%- for area in nav.serviceAreas.metro -%}
+      <li>{{ area }}</li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+<section class="section section--pale">
+  <div class="wrap split">
+    <div>
+      <p class="eyebrow">Regional Victoria</p>
+      <h2>Regional work</h2>
+      <p>
+        We regularly travel for regional jobs. Regional projects are often
+        larger and longer-running than metro work, and the shutdown windows are
+        usually easier to get.
+      </p>
+      <p>
+        If you are further out than the list below, ask anyway — a site visit is
+        worth having, and if we cannot service it properly we will tell you
+        rather than take the job and disappear.
+      </p>
+    </div>
+    <ul class="chips">
+      {%- for area in nav.serviceAreas.regional -%}
+      <li>{{ area }}</li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+<section class="section">
+  <div class="wrap split">
+    <div>
+      <p class="eyebrow">Access matters more than distance</p>
+      <h2>What actually decides whether we can help</h2>
+      <p class="lede">
+        Travel is rarely the problem on a commercial job. These are the things
+        that are.
+      </p>
+    </div>
+    <div class="prose">
+      <ul class="checks">
+        <li><strong>Site size.</strong> Small patch repairs far out of town are
+        rarely worth the travel. A full repaint usually is.</li>
+        <li><strong>Access.</strong> Loading dock, forklift access, room for a
+        boom or scaffold, and whether the street will take a truck.</li>
+        <li><strong>Height.</strong> Whether a rope access operator is
+        appropriate, and how it changes the programme.</li>
+        <li><strong>Timing.</strong> Whether you can work to your shutdown, or
+        need us out overnight.</li>
+      </ul>
+      <p>
+        Send the details through the
+        <a href="/contact/">quote form</a> and we will tell you straight away
+        whether it is worth a site visit.
+      </p>
+    </div>
+  </div>
+</section>
+
+{% include "partials/cta.njk" %}

@@ -1,0 +1,82 @@
+---
+layout: layouts/base.njk
+---
+{# ==========================================================================
+   SERVICE PAGE LAYOUT
+   --------------------------------------------------------------------------
+   Every service page uses this. Each one supplies, in its front matter:
+     title, description, intro, icon   — the essentials
+     faqs:                             optional list of { q, a } pairs
+     order:                            optional number for sorting
+
+   and its Markdown body for the long-form copy.
+
+   You should never need to edit THIS file to add a service.
+   ========================================================================== #}
+
+<section class="page-hero">
+  {% include "partials/breadcrumbs.njk" %}
+  <div class="wrap">
+    <p class="eyebrow">{{ site.tagline }}</p>
+    <h1>{{ title }}</h1>
+    {%- if intro %}<p class="lede">{{ intro }}</p>{% endif %}
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="prose">
+      {{ content | safe }}
+    </div>
+  </div>
+</section>
+
+{% if faqs %}
+<section class="section section--pale">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Questions</p>
+      <h2>{{ title }} — common questions</h2>
+    </div>
+
+    <div class="faq">
+      {%- for item in faqs -%}
+      <details>
+        <summary>{{ item.q }}</summary>
+        <div class="faq__body">
+          {%- for para in item.a -%}
+          <p>{{ para }}</p>
+          {%- endfor -%}
+        </div>
+      </details>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if related %}
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Related work</p>
+      <h2>Other services we provide</h2>
+    </div>
+    <ul class="card-grid">
+      {%- for slug in related -%}
+      {% set s = services.services | serviceBySlug(slug) %}
+      <li>
+        <a class="service-card" href="/services/{{ slug }}/">
+          <span class="service-card__icon">{{ icon(s.icon) }}</span>
+          <h3 class="service-card__title">{{ s.title }}</h3>
+          <p class="service-card__body">{{ s.short }}</p>
+          <span class="service-card__more">See how we do it</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+{% endif %}
+
+{% include "partials/cta.njk" %}

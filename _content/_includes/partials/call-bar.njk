@@ -1,0 +1,17 @@
+{#
+  Sticky click-to-call bar.
+  Many visitors will be on a phone, standing on a site or in a ute, so this is
+  the single most important conversion control on the site. It sits above the
+  content on every page and only appears on small screens.
+#}
+<div class="call-bar" data-call-bar>
+  <a class="call-bar__btn call-bar__btn--call" href="tel:{{ site.phone | tel }}">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.58 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z"/>
+    </svg>
+    <span>Call now</span>
+  </a>
+  <a class="call-bar__btn call-bar__btn--quote" href="/contact/">
+    <span>Get a quote</span>
+  </a>
+</div>

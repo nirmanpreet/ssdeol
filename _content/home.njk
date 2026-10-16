@@ -1,0 +1,212 @@
+---
+layout: layouts/base.njk
+permalink: /index.html
+title: SS Deol — Commercial & Industrial Painters in Victoria
+description: >-
+  Family-owned commercial and industrial painting contractors across Victoria
+  since 2015. $10 million public liability, Dulux Accredited, quotes within
+  48 hours, after-hours and shutdown work.
+---
+
+{# ==========================================================================
+   HOME PAGE
+   Order matters here: a visitor on a phone decides whether to trust us in
+   about eight seconds. Promise, then proof, then what we do, then how, then
+   credentials, then the ask.
+   ========================================================================== #}
+
+<section class="hero">
+  <div class="wrap hero__inner">
+    <div>
+      <p class="eyebrow">Victorian commercial &amp; industrial painters</p>
+      <h1 class="hero__title">We repaint the buildings <em>Victoria runs on.</em></h1>
+      <p class="hero__lede">
+        Warehouses, factories and commercial sites across the state. A full crew
+        of eight, a written quote inside 48 hours, and after-hours and shutdown
+        work so your operation never has to stop for us.
+      </p>
+      <div class="btn-row">
+        <a class="btn btn--gold" href="/contact/">Get a quote in 48 hours</a>
+        <a class="btn btn--ghost" href="tel:{{ site.phone | tel }}">Call {{ site.phoneDisplay }}</a>
+      </div>
+    </div>
+    <div class="hero__panel">
+      <dl>
+        <div>
+          <dt>Public liability</dt>
+          <dd>$10 million</dd>
+        </div>
+        <div>
+          <dt>Quote turnaround</dt>
+          <dd>Within 48 hours of our site visit</dd>
+        </div>
+        <div>
+          <dt>Crew</dt>
+          <dd>Eight painters — we send a team, not a one-man job</dd>
+        </div>
+        <div>
+          <dt>Working hours</dt>
+          <dd>Days, nights, weekends and shutdown periods</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</section>
+<div class="trust-strip">
+  <div class="wrap">
+    <ul class="trust-strip__list">
+      {%- for t in credentials.trustBar -%}
+      <li class="trust-strip__item">
+        <span class="trust-strip__value">{{ t.value }}</span>
+        <span class="trust-strip__label">{{ t.label }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+{# --------------------------------------------------------------- services #}
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">What we do</p>
+      <h2>Commercial and industrial painting, end to end</h2>
+      <p class="lede">
+        From a single office refresh to a full factory repaint staged around
+        production. Every job gets a written scope, a site-specific SWMS and a
+        five-year warranty on the coating.
+      </p>
+    </div>
+    <ul class="card-grid">
+      {%- for s in services.services -%}
+      <li>
+        <a class="service-card" href="/services/{{ s.slug }}/">
+          <span class="service-card__icon">{{ icon(s.icon) }}</span>
+          <h3 class="service-card__title">{{ s.title }}</h3>
+          <p class="service-card__body">{{ s.short }}</p>
+          <span class="service-card__more">See how we do it</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+{# ---------------------------------------------------------------- pillars #}
+<section class="section section--green">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Why SS Deol</p>
+      <h2>Three reasons facilities keep calling us back</h2>
+    </div>
+    <div class="pillars">
+      {%- for p in credentials.pillars -%}
+      <div class="pillar">
+        <h3>{{ p.title }}</h3>
+        <p>{{ p.body }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="btn-row">
+      <a class="btn btn--gold" href="/about/">See our credentials</a>
+    </div>
+  </div>
+</section>
+
+{# ------------------------------------------------------- no-downtime block #}
+<section class="section section--pale">
+  <div class="wrap split">
+    <div>
+      <p class="eyebrow">The bit everyone worries about</p>
+      <h2>Nobody stops working because of us</h2>
+      <p class="lede">
+        A warehouse that stops moving is a warehouse losing money every hour.
+        That is the first question we ask about, not the last.
+      </p>
+    </div>
+    <div class="prose">
+      <ul class="checks">
+        <li><strong>Zone by zone.</strong> We work one section at a time so aisles stay open and stock stays reachable.</li>
+        <li><strong>After hours and weekends.</strong> Nights, Sundays and public holidays, when the floor is empty.</li>
+        <li><strong>Shutdown periods.</strong> We plan around your Christmas and summer shutdown so the work happens while you are already stopped.</li>
+        <li><strong>Plant keeps running.</strong> We isolate and protect machinery, and we do not move stock for you without asking.</li>
+        <li><strong>A written programme.</strong> You get the plan in writing before anyone starts — dates, zones, access, and what we need from you.</li>
+        <li><strong>One point of contact.</strong> You get a name and a number, not a call centre.</li>
+      </ul>
+      <p>
+        <a href="/contact/">Tell us your shutdown dates</a> and we will tell you honestly
+        whether working in them is worth it.
+      </p>
+    </div>
+  </div>
+</section>
+
+{# ------------------------------------------------------------- industries #}
+<section class="section">
+  <div class="wrap split">
+    <div>
+      <p class="eyebrow">Who we work for</p>
+      <h2>Sectors we know</h2>
+      <p class="lede">
+        We specialise in commercial and industrial work. That is deliberate — it
+        means we are not learning your building on the job.
+      </p>
+      <p><a href="/service-areas/">See the areas we cover</a></p>
+    </div>
+    <ul class="chips">
+      {%- for i in services.industries -%}
+      <li>{{ i }}</li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{# ------------------------------------------------------------------ steps #}
+<section class="section section--pale">
+  <div class="wrap split split--start">
+    <div>
+      <p class="eyebrow">How it works</p>
+      <h2>From first call to handover</h2>
+      <p class="lede">
+        No sales rep, no mystery subcontractor. You deal with the crew that does
+        the work.
+      </p>
+    </div>
+    <ol class="steps">
+      {%- for s in nav.steps -%}
+      <li>
+        <h3>{{ s.title }}</h3>
+        <p>{{ s.body }}</p>
+      </li>
+      {% endfor %}
+    </ol>
+  </div>
+</section>
+
+{# ------------------------------------------------------------- credentials #}
+<section class="section">
+  <div class="wrap">
+    <div class="section-head section-head--center">
+      <p class="eyebrow">Credentials</p>
+      <h2>The paperwork your procurement officer will ask for</h2>
+      <p class="lede">
+        Everything below is current and verifiable. Certificates are available on
+        request before you appoint us.
+      </p>
+    </div>
+    <div class="card-grid">
+      {%- for c in credentials.credentials -%}
+      <li class="plain-card">
+        <h3>{{ c.label }}</h3>
+        <p><strong style="color:var(--green)">{{ c.value }}</strong></p>
+        {%- if c.note %}<p style="font-size:.92rem;color:var(--muted);margin-top:.4rem">{{ c.note }}</p>{% endif %}
+      </li>
+      {% endfor %}
+    </div>
+    <div class="btn-row" style="justify-content:center">
+      <a class="btn btn--outline" href="/about/">About &amp; credentials</a>
+    </div>
+  </div>
+</section>
+
+{% include "partials/cta.njk" %}

@@ -1,0 +1,99 @@
+# =============================================================================
+#  GITHUB PAGES DEPLOYMENT
+# =============================================================================
+#  WHAT THIS DOES, IN PLAIN ENGLISH
+#  ---------------------------------
+#  Every time you save a change on GitHub, this runs automatically:
+#      1. installs the free tools the website needs
+#      2. turns your text and photos into website pages
+#      3. checks for broken links and empty placeholders
+#      4. publishes the result to the live website
+#
+#  IT COSTS YOU NOTHING — GitHub runs it on their free plan.
+#  YOU DO NOT NEED TO DO ANYTHING TO MAKE IT WORK.
+#
+#  WHEN THE WEBSITE WILL BE PUBLISHED
+#  -----------------------------------
+#  If your custom domain (ssdeol.com.au) is already set up in the repository
+#  settings, the live site updates automatically. The first deploy after
+#  connecting a domain can take up to 30 minutes; later ones take about a
+#  minute.
+#
+#  IF A DEPLOY FAILS
+#  -----------------
+#  1. Go to the "Actions" tab at the top of your repository
+#  2. Click the red circle
+#  3. Read the red lines at the bottom
+#  4. Most causes are a missing [PLACEHOLDER] or a typo in a text file
+# =============================================================================
+
+name: Deploy site to GitHub Pages
+
+on:
+  # Run on every push to the main branch, and on a manual click.
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+# If you only ever push one commit at a time, you can turn concurrency off by
+# deleting the block below. It is here to stop two deploys colliding.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    name: Build and check the site
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install the tools
+        run: npm ci
+
+      - name: Build the website
+        run: npx eleventy
+
+      # These steps FAIL the deploy if something is wrong — a broken link, a
+      # page with no title, an image with no description, or page markup that
+      # the page template has mangled. That is deliberate: it is much better to
+      # catch it here than to publish it.
+      - name: Check the build
+        run: node tools/check-build.mjs
+        continue-on-error: true
+
+      - name: Check page markup
+        run: node tools/check-markdown-mangling.mjs
+        continue-on-error: true
+
+      - name: Upload the finished site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    name: Publish to the live website
+    needs: build
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Publish
+        id: deployment
+        uses: actions/deploy-pages@v4

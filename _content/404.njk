@@ -1,0 +1,39 @@
+---
+layout: layouts/base.njk
+permalink: /404.html
+title: Page not found
+description: That page could not be found. Here is where everything else is.
+eleventyExcludeFromCollections: true
+---
+
+<section class="section" style="padding-block:clamp(3rem,6vw,6rem)">
+  <div class="wrap" style="max-width:64ch">
+    <p class="eyebrow">Error 404</p>
+    <h1 style="font-size:var(--step-4)">That page isn't here</h1>
+    <p class="lede" style="margin-top:1rem">
+      The link may be old, or we may have moved something. Everything is one
+      click away below — or call us and we will point you straight at it.
+    </p>
+    <div class="btn-row">
+      <a class="btn btn--green" href="/">Back to the homepage</a>
+      <a class="btn btn--gold" href="/services/">See all services</a>
+    </div>
+
+    <h2 style="font-size:var(--step-2);margin-top:3rem">Popular pages</h2>
+    <ul class="checks" style="margin-top:1rem">
+      <li><a href="/services/epoxy-floor-coatings/">Epoxy &amp; polyurea floor coatings</a></li>
+      <li><a href="/services/line-marking/">Warehouse &amp; factory line marking</a></li>
+      <li><a href="/services/commercial-repainting/">Commercial &amp; industrial repainting</a></li>
+      <li><a href="/services/">All nine service lines</a></li>
+      <li><a href="/about/">About us &amp; credentials</a></li>
+      <li><a href="/service-areas/">Areas we cover</a></li>
+      <li><a href="/contact/">Get a quote</a></li>
+    </ul>
+    <div class="notice" style="margin-top:2.5rem">
+      <p><strong>Looking for a quote?</strong> Call
+        <a href="tel:{{ site.phone | tel }}">{{ site.phoneDisplay }}</a>
+        {{ site.hours.emergency | lower }}, or use the
+        <a href="/contact/">quote form</a> — we reply within 48 hours.</p>
+    </div>
+  </div>
+</section>

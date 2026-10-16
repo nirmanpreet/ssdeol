@@ -1,0 +1,92 @@
+# ==============================================================================
+#  THE NINE SERVICES
+# ==============================================================================
+#  The order here is the order they appear on the Services page and in the
+#  homepage grid. To reorder, drag the whole blocks up or down.
+#
+#  Each service points at a Markdown file in  _content/services/
+#  That file holds the long-form copy. This file only holds the short summary
+#  that appears on cards, plus which icons to use.
+# ==============================================================================
+
+services:
+  - slug: commercial-repainting
+    title: Commercial & Industrial Repainting
+    short: >-
+      Interior and exterior repaints for warehouses, factories and commercial
+      buildings — planned in zones around your operation.
+    icon: roller
+
+  - slug: epoxy-floor-coatings
+    title: Epoxy & Polyurea Floor Coatings
+    short: >-
+      Industrial floor systems built for forklifts, spills and hard use, from
+      primer through to the finished topcoat.
+    icon: floor
+
+  - slug: line-marking
+    title: Warehouse & Factory Line Marking
+    short: >-
+      Aisle lines, pedestrian walkways, hazard zones and bay markings that
+      stand up to traffic.
+    icon: lines
+
+  - slug: texture-coating
+    title: Texture Coating & Spray Rendering
+    short: >-
+      Spray-applied texture finishes that cover old render and hold a
+      consistent finish across large elevations.
+    icon: spray
+
+  - slug: structural-coatings
+    title: Structural, Tilt-Up & Fire-Rating Coatings
+    short: >-
+      Structural steel, tilt-up panel exteriors and intumescent fire protection,
+      applied to spec.
+    icon: steel
+
+  - slug: high-rise-rope-access
+    title: High-Rise & Rope Access Painting
+    short: >-
+      External and internal rope access for buildings where scaffolding is not
+      practical or affordable.
+    icon: rope
+
+  - slug: pre-construction
+    title: Pre-Construction & New Build Painting
+    short: >-
+      Interior fit-off and final coats for builders and head contractors, on
+      programme and to specification.
+    icon: build
+
+  - slug: waterproofing-repairs
+    title: Waterproofing, Repairs & Heritage
+    short: >-
+      Water ingress, concrete defects and heritage-sensitive work — fixed
+      properly before a coat of paint goes on.
+    icon: repair
+
+  - slug: maintenance-programmes
+    title: Planned Maintenance Programmes
+    short: >-
+      Scheduled repaint cycles across multiple sites, budgeted up front, so
+      facilities never become reactive.
+    icon: calendar
+
+# ==============================================================================
+#  INDUSTRIES WE WORK IN
+# ==============================================================================
+#  Shown on the homepage, the Services page and the About page.
+#  Delete any industry you do not actually want more work from.
+# ==============================================================================
+industries:
+  - Warehouses & Distribution
+  - Factories & Manufacturing
+  - Offices & Corporate
+  - Retail & Shopfronts
+  - Strata & Body Corporate
+  - Schools & Childcare
+  - Aged Care
+  - Hospitality & Restaurants
+  - Transport Depots
+  - Utility & Energy Sites

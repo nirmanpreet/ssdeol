@@ -1,0 +1,16 @@
+---
+permalink: /sitemap.xml
+eleventyExcludeFromCollections: true
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{%- for item in collections.all -%}
+{%- if item.url and item.url != "/sitemap.xml" %}
+  <url>
+    <loc>{{ site.url }}{{ item.url }}</loc>
+    <changefreq>monthly</changefreq>
+    <priority>{% if item.url == "/" %}1.0{% elif "/services/" in item.url %}0.8{% else %}0.6{% endif %}</priority>
+  </url>
+{%- endif %}
+{%- endfor %}
+</urlset>

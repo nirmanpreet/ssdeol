@@ -1,0 +1,85 @@
+# ==============================================================================
+#  MAIN NAVIGATION
+# ==============================================================================
+#  To add a page to the menu, add a line here AND create a matching Markdown
+#  file in _content/. Keep the two filenames the same.
+#
+#  To hide a page from the menu, delete its line from `main` below.
+#  (Every page stays reachable — this only controls the visible menu.)
+# ==============================================================================
+
+main:
+  - title: Services
+    url: /services/
+  - title: Projects
+    url: /projects/
+  - title: About
+    url: /about/
+  - title: Service Areas
+    url: /service-areas/
+  - title: Contact
+    url: /contact/
+
+# Shown as the gold button in the header
+cta:
+  title: Get a Quote
+  url: /contact/
+
+# ------------------------------------------------------------------
+#  SERVICE AREAS SHOWN ON THE SERVICE AREAS PAGE
+# ------------------------------------------------------------------
+#  Add a line to grow this list. Only add regions you genuinely cover —
+#  claiming an area you don't service costs you a difficult job.
+# ------------------------------------------------------------------
+serviceAreas:
+  metro:
+    - Altona North & Deer Park
+    - Footscray & Williamstown
+    - Laverton & Truganina
+    - Brooklyn & Campbellfield
+    - Dandenong & Cranbourne
+    - Cheltenham & Braeside
+    - Melbourne CBD & Southbank
+    - Broadmeadows & Thomastown
+    - Rowville & Knoxfield
+    - Moorabbin & Clayton
+  regional:
+    - Geelong & the Bellarine
+    - Ballarat
+    - Bendigo
+    - Latrobe Valley
+    - Mornington Peninsula
+    - Macedon Ranges
+
+# ------------------------------------------------------------------
+#  THE SEVEN-STEP PROCESS  (homepage + contact page)
+# ------------------------------------------------------------------
+steps:
+  - title: You call or send the quote form
+    body: >-
+      Tell us what the building is, roughly how big, and when you need it done.
+      Photos are helpful but not essential.
+  - title: We come and look
+    body: >-
+      A site visit so we can see the surfaces, the access, the light and the
+      things that get missed over the phone.
+  - title: Written quote within 48 hours
+    body: >-
+      Itemised, with the coating system we recommend and the reason we
+      recommend it. No obligation.
+  - title: We plan around your operation
+    body: >-
+      Zones, hours and shutdown dates agreed in writing before anyone turns up.
+      SWMS prepared for the job.
+  - title: We paint
+    body: >-
+      Full crew, daily clean-down, daily progress update. Aisle widths and
+      access routes kept usable.
+  - title: Inspection and handover
+    body: >-
+      Walk the job with you, fix anything you want changed, hand over the
+      SWMS and the warranty.
+  - title: Five-year warranty
+    body: >-
+      Written cover against failure of adhesion for five years on the coating
+      systems we supply and apply.

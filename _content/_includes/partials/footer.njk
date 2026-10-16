@@ -1,0 +1,91 @@
+{% set year = "" %}
+<footer class="site-footer">
+  <div class="wrap">
+
+    <div class="site-footer__top">
+      <div class="site-footer__brand">
+        <picture>
+          <source srcset="/assets/img/brand/logo.avif" type="image/avif">
+          <source srcset="/assets/img/brand/logo.webp" type="image/webp">
+          <img class="site-footer__logo"
+               src="/assets/img/brand/logo.png"
+               width="150" height="136"
+               alt=""
+               loading="lazy" decoding="async">
+        </picture>
+        <p class="site-footer__blurb">
+          {{ site.shortDescription }}
+        </p>
+        <p class="site-footer__abn">
+          <strong>{{ site.legalName }}</strong><br>
+          ABN {{ site.abn }}
+        </p>
+      </div>
+
+      <div class="site-footer__col">
+        <h2 class="site-footer__heading">Services</h2>
+        <ul>
+          {%- for s in services.services -%}
+          <li><a href="/services/{{ s.slug }}/">{{ s.title }}</a></li>
+          {%- endfor -%}
+        </ul>
+      </div>
+
+      <div class="site-footer__col">
+        <h2 class="site-footer__heading">Company</h2>
+        <ul>
+          <li><a href="/about/">About &amp; Credentials</a></li>
+          <li><a href="/projects/">Projects</a></li>
+          <li><a href="/service-areas/">Service Areas</a></li>
+          <li><a href="/contact/">Get a Quote</a></li>
+          <li><a href="/privacy/">Privacy Policy</a></li>
+        </ul>
+      </div>
+
+      <div class="site-footer__col site-footer__col--contact">
+        <h2 class="site-footer__heading">Talk to us</h2>
+        <p class="site-footer__phone">
+          <a href="tel:{{ site.phone | tel }}">{{ site.phoneDisplay }}</a>
+        </p>
+        {% if site.landline %}
+        <p class="site-footer__phone site-footer__phone--sm">
+          <a href="tel:{{ site.landline | tel }}">{{ site.landline }}</a>
+        </p>
+        {% endif %}
+        <p><a href="mailto:{{ site.email }}">{{ site.email }}</a></p>
+        <p class="site-footer__addr">
+          {{ site.addressLine1 }}<br>
+          {{ site.suburb }} {{ site.state }} {{ site.postcode }}
+        </p>
+        {% if site.showHours %}
+        <p class="site-footer__hours">
+          {{ site.hours.weekdays }}<br>
+          {{ site.hours.weekends }}<br>
+          {{ site.hours.emergency }}
+        </p>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="trust-strip" aria-label="Credentials">
+      <ul class="trust-strip__list">
+        {%- for t in credentials.trustBar -%}
+        <li class="trust-strip__item">
+          <span class="trust-strip__value">{{ t.value }}</span>
+          <span class="trust-strip__label">{{ t.label }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="site-footer__bottom">
+      <p>&copy; {{ site.legalName }} ABN {{ site.abn }}. Trading since {{ site.tradingSince }}.</p>
+      <p>
+        <a href="/privacy/">Privacy</a>
+        <span aria-hidden="true">·</span>
+        <a href="/contact/">Contact</a>
+      </p>
+    </div>
+
+  </div>
+</footer>

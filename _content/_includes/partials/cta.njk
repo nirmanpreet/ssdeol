@@ -1,0 +1,24 @@
+{# The closing call-to-action band, repeated on every page.
+   The phone number and both fallback links are always shown, so a visitor whose
+   form submission fails still has somewhere to go. #}
+<section class="cta-band">
+  <div class="wrap cta-band__inner">
+    <div>
+      <h2>{{ ctaHeading | default("Need a quote?") }}</h2>
+      <p>
+        Tell us what the building is, roughly how big, and when you need it done.
+        {{ site.shortDescription }} Quotes within
+        {{ site.promises.quoteTurnaround }}.
+      </p>
+      {% if site.showHours %}
+      <a class="cta-band__phone" href="tel:{{ site.phone | tel }}">
+        {{ site.phoneDisplay }} — {{ site.hours.emergency }}
+      </a>
+      {% endif %}
+    </div>
+    <div class="cta-band__actions">
+      <a class="btn btn--gold" href="/contact/">Get a quote</a>
+      <a class="btn btn--ghost" href="tel:{{ site.phone | tel }}">Call {{ site.phoneDisplay }}</a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,72 @@
+{#
+  STRUCTURED DATA (Schema.org)
+
+  This is the machine-readable version of the page, read by Google.
+  It is what lets Google show a phone number, opening hours, service list and
+  star rating directly in the search results.
+
+  PaintingService is a subtype of LocalBusiness — more specific than most of
+  our competitors use, which is a small but real advantage.
+
+  NOTE: we deliberately do NOT publish AggregateRating or Review. Review
+  markup is only legal if every rating on it is genuine and verifiable.
+#}
+{% set schema = {
+  "@context": "https://schema.org",
+  "@type": "PaintingService",
+  "name": site.legalName,
+  "alternateName": site.name,
+  "description": site.defaultMetaDescription,
+  "url": site.url,
+  "logo": site.url + "/assets/img/brand/icon-512.png",
+  "image": site.url + "/assets/img/brand/logo.webp",
+  "telephone": site.phone,
+  "email": site.email,
+  "foundingDate": "2015",
+  "priceRange": "$$",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": site.addressLine1,
+    "addressLocality": site.suburb,
+    "addressRegion": site.state,
+    "postalCode": site.postcode,
+    "addressCountry": "AU"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "[PLACEHOLDER: -37.7981]",
+    "longitude": "[PLACEHOLDER: 144.7414]"
+  },
+  "areaServed": {
+    "@type": "State",
+    "name": "Victoria"
+  },
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+    "opens": "07:00",
+    "closes": "17:00"
+  },
+  "knowsAbout": services.services | names("title"),
+  "hasCredential": credentials.credentials | names("label"),
+  "identifier": {
+    "@type": "PropertyValue",
+    "name": "ABN",
+    "value": site.abn
+  },
+  "makesOffer": services.services | names("title")
+} %}
+<script type="application/ld+json">{{ schema | dump | safe }}</script>
+
+{%- if page.url != "/" -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ site.url }}/" },
+    { "@type": "ListItem", "position": 2, "name": "{{ title }}", "item": "{{ site.url }}{{ page.url }}" }
+  ]
+}
+</script>
+{% endif %}

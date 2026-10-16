@@ -1,0 +1,8 @@
+<div class="wrap">
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="/">Home</a>
+    {%- if page.url != "/" and not hideBreadcrumbHome -%}
+    <span aria-hidden="true">/</span>{{ title }}
+    {% endif %}
+  </nav>
+</div>

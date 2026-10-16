@@ -1,0 +1,35 @@
+# ---------------------------------------------------------------------------
+#  THINGS THAT SHOULD NEVER BE COMMITTED
+# ---------------------------------------------------------------------------
+
+# Dependencies — re-installed from package.json by GitHub Actions
+node_modules/
+
+# The built website. GitHub Pages is generated from this on every push, so it
+# is never stored in the repository.
+_site/
+
+# Eleventy's cache
+.cache/
+
+# Your original, full-size logo. The optimised versions in assets/img/brand/
+# are what the site uses. (If you want the original kept as a backup, use
+# GitHub Releases or private storage instead.)
+# logo.png
+
+# Screenshots produced by `npm run qa:visual`. Regenerate them any time —
+# they are not worth storing in the repository.
+.qa-screenshots/
+
+# OS and editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Anything with real customer details should never be committed by accident
+*.env
+.env*

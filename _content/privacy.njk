@@ -1,0 +1,135 @@
+---
+layout: layouts/base.njk
+permalink: /privacy/index.html
+title: Privacy Policy
+description: >-
+  How SS Deol collects, uses and protects the personal information you send
+  through this website, under the Australian Privacy Act 1988.
+hideBreadcrumbHome: false
+---
+
+<section class="page-hero">
+  {% include "partials/breadcrumbs.njk" %}
+  <div class="wrap">
+    <p class="eyebrow">Legal</p>
+    <h1>Privacy policy</h1>
+    <p class="lede">
+      What we collect when you use this site, why we collect it, how long we
+      keep it and who else sees it.
+    </p>
+  </div>
+</section>
+<section class="section">
+  <div class="wrap prose" style="max-width:72ch">
+
+    <p style="color:var(--muted);font-size:.92rem">
+      Last updated: <span class="ph">[PLACEHOLDER: add the month and year you publish this]</span>
+    </p>
+
+    <h2>Who we are</h2>
+    <p>
+      {{ site.legalName }} (ABN {{ site.abn }}) is a commercial and industrial
+      painting contractor based in {{ site.suburb }}, Victoria
+      ({{ site.state }} {{ site.postcode }}).
+    </p>
+    <p>
+      Enquiries about this policy can be sent to
+      <a href="mailto:{{ site.email }}">{{ site.email }}</a> or made by
+      calling <a href="tel:{{ site.phone | tel }}">{{ site.phoneDisplay }}</a>.
+    </p>
+
+    <h2>What we collect</h2>
+    <p>When you use the quote form on this website we collect:</p>
+    <ul>
+      <li>your name</li>
+      <li>your phone number</li>
+      <li>your email address</li>
+      <li>your company name, if you provide one</li>
+      <li>the suburb or site address, property type, service required, approximate
+        size, timing and working-hours preferences you select</li>
+      <li>the description you write in the message box</li>
+    </ul>
+    <p>
+      If you send photos by email rather than through the form, we also hold
+      those images and they are treated the same way.
+    </p>
+    <p>We also record basic, aggregated, anonymous website usage statistics so we
+      can see which pages are useful. We do not collect anything that identifies
+      you personally through that.</p>
+
+    <h2>Why we collect it</h2>
+    <p>
+      So we can contact you about your enquiry, inspect the site, and prepare and
+      send you a written quote. That is the entire purpose. We will not add you
+      to a marketing list because you asked for a quote, and we will not pass
+      your details to anyone else for marketing.
+    </p>
+
+    <h2>Who else receives it</h2>
+    <p>
+      Our website is hosted on GitHub, and form submissions are delivered using a
+      third-party form service. The information you type into the quote form is
+      transmitted over an encrypted connection to
+      <strong>Web3Forms</strong>, which forwards it to our email inbox.
+    </p>
+    <p>
+      We do not sell your information, and we do not disclose it to third parties
+      except where the law requires it. If we ever need to pass site access or
+      project information to a subcontractor to complete your job, we will tell
+      you first.
+    </p>
+
+    <h2>How long we keep it</h2>
+    <p>
+      Enquiries that do not become projects are deleted within
+      <span class="ph">[PLACEHOLDER: e.g. 12]</span> months. Enquiries that do
+      become projects are kept for as long as the contract requires and for the
+      period afterwards in which we may need to deal with a warranty claim under
+      our five-year coating warranty.
+    </p>
+
+    <h2>Cookies</h2>
+    <p>
+      This website does not use advertising cookies, tracking pixels, or
+      cross-site tracking. You will not be asked to accept a cookie banner
+      because there is nothing to accept.
+    </p>
+    <p>
+      Two things do set small technical files: a spam-protection check when you
+      submit the form, and standard server logs. Neither is used to track you
+      across other websites.
+    </p>
+
+    <h2>Your rights</h2>
+    <p>
+      Under the Australian Privacy Act 1988 you can ask us to tell you what
+      personal information we hold about you, correct it if it is wrong, or
+      delete it where we are not required to keep it. We will respond within a
+      reasonable time and we will not charge you for it.
+    </p>
+    <p>
+      To make a request, email <a href="mailto:{{ site.email }}">{{ site.email }}</a>.
+    </p>
+
+    <h2>Security</h2>
+    <p>
+      This website is served over encrypted HTTPS. The form you use is sent
+      over an encrypted connection. No system is perfectly secure, but we do not
+      collect anything from you that we do not need in order to quote for and
+      complete your work.
+    </p>
+
+    <h2>Changes to this policy</h2>
+    <p>
+      If this policy changes we will update the date at the top of this page.
+      Questions about any of it are welcome — ask us.
+    </p>
+    <div class="notice" style="margin-top:2.5rem">
+      <p><strong>Plain-English summary:</strong> We collect what you type into
+      the quote form so we can quote for your job. It goes to our inbox through
+      a free form service. We do not sell it, we do not use it for marketing,
+      and there are no tracking cookies on this site.</p>
+    </div>
+
+  </div>
+</section>

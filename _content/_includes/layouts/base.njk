@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>{% if title %}{{ title }} | {{ site.titleSuffix }}{% else %}{{ site.name }} — {{ site.tagline }}{% endif %}</title>
+  <meta name="description" content="{{ description | default(site.defaultMetaDescription) | strip_newlines | truncate(300) }}">
+
+  {# --- Canonical: tells Google which URL is the real one ---------------- #}
+  <link rel="canonical" href="{{ site.url }}{{ page.url }}">
+
+  {# --- Open Graph / social sharing -------------------------------------- #}
+  <meta property="og:type" content="{% if isService or page.url == '/' %}website{% else %}article{% endif %}">
+  <meta property="og:site_name" content="{{ site.name }}">
+  <meta property="og:title" content="{{ title | default(site.tagline) }}">
+  <meta property="og:description" content="{{ description | default(site.defaultMetaDescription) | strip_newlines | truncate(300) }}">
+  <meta property="og:url" content="{{ site.url }}{{ page.url }}">
+  <meta property="og:locale" content="en_AU">
+  <meta property="og:image" content="{{ site.url }}/assets/img/brand/icon-512.png">
+  <meta property="og:image:alt" content="{{ site.name }} — {{ site.tagline }}">
+  <meta name="twitter:card" content="summary">
+
+  {# --- Favicons ---------------------------------------------------------- #}
+  <link rel="icon" href="/assets/img/brand/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/assets/img/brand/favicon.png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/assets/img/brand/apple-touch-icon.png">
+
+  {# --- Fonts. Preload only the two faces needed for the first paint ------ #}
+  <link rel="preload" href="/assets/fonts/barlow-condensed-700-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/inter-400-600-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/assets/fonts/fonts.css">
+  <link rel="stylesheet" href="/assets/css/main.css">
+
+  {# --- Local business location hints ------------------------------------- #}
+  <meta name="geo.region" content="AU-VIC">
+  <meta name="geo.placename" content="{{ site.suburb }}, Victoria">
+
+  {% include "partials/schema.njk" %}
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  {% include "partials/header.njk" %}
+
+  <main id="main">
+    {{ content | safe }}
+  </main>
+
+  {% include "partials/footer.njk" %}
+  {% include "partials/call-bar.njk" %}
+
+  <script src="/assets/js/main.js" defer></script>
+</body>
+</html>

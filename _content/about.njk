@@ -1,0 +1,163 @@
+---
+layout: layouts/base.njk
+permalink: /about/index.html
+title: About & Credentials
+description: >-
+  SS Deol is a family-owned commercial and industrial painting contractor based
+  in Melbourne's west, trading since 2015. Eight painters, $10 million public
+  liability, Dulux Accredited, all crew white-carded.
+---
+
+<section class="page-hero">
+  {% include "partials/breadcrumbs.njk" %}
+  <div class="wrap">
+    <p class="eyebrow">About us</p>
+    <h1>A family business that paints industrial Victoria</h1>
+    <p class="lede">
+      The same crew, the same family, since 2015. We are based in Melbourne's
+      western industrial corridor and we work right across Victoria — and we
+      would rather tell you honestly that something is not a good fit than take
+      a job we will not do well.
+    </p>
+  </div>
+</section>
+<section class="section">
+  <div class="wrap split">
+    <div>
+      <p class="eyebrow">Who we are</p>
+      <h2>Trading since 2015</h2>
+      <p class="lede">
+        SS Deol is a family-owned and operated commercial and industrial
+        painting contractor. The same people quote the job, organise it, and
+        turn up to paint it.
+      </p>
+    </div>
+    <div class="prose">
+      <p>
+        We started in 2015 painting commercial and industrial work across
+        Melbourne. What has stayed constant is the scale: we are a crew of
+        <strong>eight painters</strong>, and we send the whole crew. That is a
+        deliberate choice. A single painter on a warehouse repaint turns a
+        three-week job into a three-month one, and it means when six areas need
+        doing at once you are getting one trade rather than six.
+      </p>
+      <p>
+        We work exclusively in the <strong>commercial and industrial</strong>
+        sector. Not because we cannot paint houses — because a warehouse at
+        thirty degrees with live plant running is a different problem from a
+        living room, and it deserves someone who has done it before. It also
+        means the crew knows what an aisle width, a shutdown window and a
+        tilt-up joint look like before we arrive.
+      </p>
+      <p>
+        We are based at <strong>Altona North (VIC 3024)</strong>, in the middle
+        of Melbourne's western industrial corridor, and we service all of
+        Victoria. Our ABN is {{ site.abn }} and the entity is registered as
+        {{ site.legalName }}. You can verify that yourself on the
+        <a href="https://abr.business.gov.au/" rel="nofollow noopener" target="_blank">Australian Business Register</a>
+        — we would rather you check than take our word for it.
+      </p>
+    </div>
+  </div>
+</section>
+<section class="section section--pale">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Credentials</p>
+      <h2>Everything below is current and verifiable</h2>
+      <p class="lede">
+        Certificates, policy numbers and records are available on request before
+        you appoint us. If a procurement officer needs something that is not
+        listed here, ask — we would rather provide it than have you assume we
+        do not have it.
+      </p>
+    </div>
+    <table class="cred-table">
+      <caption>SS Deol credentials. ABN {{ site.abn }}. Updated as at launch.</caption>
+      <tbody>
+        {%- for c in credentials.credentials -%}
+        <tr>
+          <th scope="row">{{ c.label }}</th>
+          <td>
+            <strong>{{ c.value }}</strong>
+            {%- if c.note %}{{ c.note }}{% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+        <tr>
+          <th scope="row">Australian Business Number</th>
+          <td>
+            <strong>{{ site.abn }}</strong>
+            {{ site.legalName }}, Australian Private Company, GST registered.
+            Publicly verifiable on the Australian Business Register.
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Safe Work Method Statements</th>
+          <td>
+            <strong>Prepared for every job</strong>
+            A site-specific SWMS is written and signed off before work begins.
+            Work over two metres, over or next to water, or around powered
+            mobile plant always requires one — in practice that is most of what
+            we do.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+<section class="section">
+  <div class="wrap split">
+    <div>
+      <p class="eyebrow">How we work</p>
+      <h2>The things we will and will not do</h2>
+    </div>
+    <div class="prose">
+      <h3>We will</h3>
+      <ul class="checks">
+        <li>Tell you if a cheaper coating system would do the job as well.</li>
+        <li>Tell you if the surface needs repairing before it is worth painting.</li>
+        <li>Tell you if we are not the right contractor for it — including sending you to someone who is.</li>
+        <li>Give you a written programme with dates we actually believe.</li>
+        <li>Tell you if your shutdown window is not long enough for the work you want.</li>
+        <li>Turn up when we said we would, and tell you early if we cannot.</li>
+      </ul>
+
+      <h3>We will not</h3>
+      <ul class="checks">
+        <li>Paint over a leak, active rust or a wet slab and call it done.</li>
+        <li>Send a subcontracted crew you have not met onto your site without telling you.</li>
+        <li>Claim a variation we have not had confirmed in writing.</li>
+        <li>Start before the SWMS is signed off.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+<section class="section section--green">
+  <div class="wrap split">
+    <div>
+      <p class="eyebrow">Why we quote in 48 hours</p>
+      <h2>Speed is the whole product</h2>
+      <p>
+        Painting quotes sit on a shelf. The contractor who answers quickly gets
+        the job, and the contractor who is thorough but slow gets told
+        "we have gone with someone else".
+      </p>
+      <p>
+        So we write it properly, once, and send it to you inside 48 hours of our
+        site visit. You still get a real quote with a real specification — we
+        have just removed the dead time around it.
+      </p>
+      <div class="btn-row">
+        <a class="btn btn--gold" href="/contact/">Get a quote</a>
+      </div>
+    </div>
+    <ul class="chips">
+      {%- for i in services.industries -%}
+      <li>{{ i }}</li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{% include "partials/cta.njk" %}

@@ -1,0 +1,47 @@
+<header class="site-header" data-header>
+  <div class="wrap site-header__inner">
+
+    <a class="brand" href="/" aria-label="{{ site.name }} — home">
+      {# Format ladder: AVIF (37 KB) -> WebP (93 KB) -> PNG (135 KB). The original
+       logo.png was 914 KB, so this alone saves ~875 KB on the critical path. #}
+      <picture>
+        <source srcset="/assets/img/brand/logo.avif" type="image/avif">
+        <source srcset="/assets/img/brand/logo.webp" type="image/webp">
+        <img
+          class="brand__logo"
+          src="/assets/img/brand/logo.png"
+          width="190" height="172"
+          alt=""
+          decoding="async">
+      </picture>
+      <span class="brand__text">
+        <span class="brand__name">{{ site.name }}</span>
+        <span class="brand__tag">{{ site.tagline }}</span>
+      </span>
+    </a>
+
+    <nav class="site-nav" id="site-nav" aria-label="Main">
+      <ul class="site-nav__list">
+        {%- for item in nav.main -%}
+        <li>
+          <a href="{{ item.url }}"
+             {% if page.url == item.url %}aria-current="page"{% endif %}>
+            {{ item.title }}
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+      <a class="btn btn--gold site-nav__cta" href="{{ nav.cta.url }}">{{ nav.cta.title }}</a>
+    </nav>
+
+    <button class="nav-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="site-nav"
+            data-nav-toggle>
+      <span class="nav-toggle__bars" aria-hidden="true"></span>
+      <span class="visually-hidden">Menu</span>
+    </button>
+
+  </div>
+</header>
