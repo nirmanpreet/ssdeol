@@ -187,6 +187,19 @@ These are empty **on purpose**. Fill them in when you have the material.
 
 ## 9. How to check you have not missed anything
 
+Two commands:
+
+```bash
+npm run qa        # everything, against a local build
+npm run qa:live   # the REAL deployed site at github.com/nirmanpreet/ssdeol
+```
+
+`qa:live` is the important one before launch. It opens the actual published
+URL in a browser and confirms the stylesheet loaded, the JavaScript ran,
+nothing 404s, no content is stuck invisible, and no internal notes leaked. It
+also prints any remaining placeholders — that list must be empty before you
+call the site finished.
+
 There is an automated check that lists every remaining placeholder:
 
 1. Go to the **Actions** tab on your GitHub repository
@@ -199,3 +212,28 @@ titles. If it says **"ALL CHECKS PASSED"**, you are clear to launch.
 ---
 
 **Last updated: see the top of this file.**
+---
+
+## 10. Attaching the domain — one line to change
+
+The site is currently built for `github.com/nirmanpreet/ssdeol/`, which is
+served from a `/ssdeol/` subfolder. When you attach `ssdeol.com.au`, the site
+is served from the root instead, and **the base path must change to match** or
+every stylesheet, script, font and image will 404 and the site will render
+unstyled.
+
+**How to switch:**
+
+1. **In GitHub Actions** — open `.github/workflows/deploy.yml` and change:
+   ```yaml
+   SITE_BASE_PATH: /ssdeol/     →     SITE_BASE_PATH: /
+   ```
+2. Commit. The next deploy builds for the domain root.
+3. Run `npm run qa:live` afterwards to confirm.
+
+Nothing else moves. Templates, stylesheets and scripts all reference the base
+path rather than hard-coding it.
+
+> ⚠️ This is exactly the bug that left the site unstyled for the first few
+> deploys, so do not skip step 3. If the page looks like plain unstyled text,
+> step 1 was missed.
