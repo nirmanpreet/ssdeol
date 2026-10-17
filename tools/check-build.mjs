@@ -71,21 +71,39 @@ else warn(`${phTotal} placeholder(s) still present — see TO-FILL-IN-BEFORE-LAU
 
 /* --------------------------------------------------- 3: internal links -- */
 console.log('\n[2/8] Internal links');
+// Built pages are prefixed with the deploy base path (e.g. /ssdeol/ on
+// github.io, / on a custom domain). Strip it before comparing against the
+// files on disk, and separately assert the prefix is actually present.
+const BASE = process.env.SITE_BASE_PATH ?? '/ssdeol/';
 const known = new Set(all.map(rel).concat(all.map((f) => '/' + rel(f))));
 let broken = 0;
+let unprefixed = 0;
+
 for (const f of htmlFiles) {
   const html = readFileSync(f, 'utf8');
+  const name = rel(f);
+
   for (const m of html.matchAll(/(?:href|src)="(\/[^"#?]*)/g)) {
-    let target = m[1];
-    if (known.has(target)) continue;
-    // Directory-style URLs resolve to their index.html
-    if (known.has(target.replace(/\/$/, '') + '/index.html')) continue;
-    if (target.startsWith('/assets/')) { fail(`${rel(f)} -> missing asset ${target}`); broken++; continue; }
-    fail(`${rel(f)} -> broken link ${target}`);
+    const target = m[1];
+
+    // The base path itself must be carried, or assets 404 in production.
+    if (BASE !== '/' && target.startsWith('/') && !target.startsWith(BASE) && !target.startsWith('//')) {
+      fail(`${name} -> ${target} is missing the "${BASE}" prefix`);
+      unprefixed++;
+      continue;
+    }
+
+    const strip = (u) => (u.startsWith(BASE) ? u.slice(BASE.length - 1) || '/' : u);
+    const local = strip(target);
+
+    if (known.has(local)) continue;
+    if (known.has(`${local.replace(/\/$/, '')}/index.html`)) continue;
+
+    fail(`${name} -> broken link ${target}`);
     broken++;
   }
 }
-if (broken === 0) ok('every internal link and asset reference resolves');
+if (broken === 0 && unprefixed === 0) ok(`every internal link and asset resolves under "${BASE}"`);
 
 /* ----------------------------------------------------- 4 & 7: assets --- */
 console.log('\n[3/8] Asset weight (performance budget)');

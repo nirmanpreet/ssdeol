@@ -64,12 +64,25 @@ jobs:
       - name: Install the tools
         run: npm ci
 
-      # Compiles src/js/*.ts -> assets/js/main.js with esbuild, then builds the
-      # pages. Both steps must run here — the TypeScript is the source of truth,
-      # so the site must never be published from a stale bundle.
+      # ---------------------------------------------------------------
+      # BASE PATH
+      #
+      #   /ssdeol/   ->  testing at nirmanpreet.github.io/ssdeol/
+      #   /          ->  live at ssdeol.com.au (once the domain is attached)
+      #
+      # GitHub Pages serves a project site from /<repo>/, so a root-absolute
+      # /assets/... URL resolves to the DOMAIN root and 404s — the site renders
+      # unstyled with no JavaScript. Change this ONE line to switch to the
+      # domain. See the long comment at the top of .eleventy.js.
+      # ---------------------------------------------------------------
       - name: Build the website
         run: npm run build
+        env:
+          SITE_BASE_PATH: /ssdeol/
 
+      # Compiles src/js/*.ts -> assets/js/main.js with esbuild, then builds the
+      # pages. The TypeScript is the source of truth, so the site is never
+      # published from a stale bundle.
       - name: Type-check the scripts
         run: npx tsc --noEmit
         continue-on-error: true
@@ -84,6 +97,17 @@ jobs:
 
       - name: Check page markup
         run: node tools/check-markdown-mangling.mjs
+        continue-on-error: true
+
+      # Catches the outage where the HTML referenced /assets/... correctly but
+      # the site was served from /<repo>/ so every asset 404'd. Loads the real
+      # build in a browser and asserts the CSS applied and the JS ran.
+      - name: Confirm assets actually load
+        run: node tools/qa-assets.mjs
+        continue-on-error: true
+
+      - name: Check every URL carries the base path
+        run: node tools/check-base-path.mjs
         continue-on-error: true
 
       - name: Upload the finished site

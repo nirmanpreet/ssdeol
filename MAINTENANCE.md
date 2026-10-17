@@ -235,6 +235,36 @@ line starting `-` to the line before the next `-`. Keep the indentation.
 
 ---
 
+## 🧮 The quote calculator
+
+The Contact page has a **cost checker**: pick the job and it shows an
+indicative price range in about twenty seconds, then asks for details.
+
+**It is switched off at the moment, on purpose.** Open
+`_content/_data/pricing.yml` and you will find placeholder rates and:
+
+```yaml
+configured: false
+```
+
+While that says `false`, the site shows *"Not ready to publish prices yet"*
+instead of a number. It will never publish a price you have not approved.
+
+### Turning it on
+
+1. Open `_content/_data/pricing.yml`
+2. Work out your real rates — the top of that file explains how (use the
+   **median of your last ten jobs**, not the average)
+3. Replace every rate
+4. Change `configured: false` to `configured: true`
+5. Commit
+
+> ⚠️ **Err wide.** Too low and you win work you cannot afford, then quote out of
+> pocket when it turns out to need more preparation. Too tight and nobody
+> bothers. When in doubt, widen the range.
+
+---
+
 ## 🧩 Testimonials
 
 There are no testimonials on the site yet, on purpose. Invented quotes from

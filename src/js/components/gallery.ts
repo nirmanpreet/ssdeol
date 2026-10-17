@@ -155,27 +155,76 @@ export function initComparisons(): void {
 }
 
 /* --------------------------------------------------------- scroll reveal -- */
+/**
+ * Fades sections in as they are scrolled past.
+ *
+ * SAFETY RULES — this animation is never allowed to hide real content:
+ *   1. The pre-JS state is visible (CSS keys off `html.js`), so if the script
+ *      fails to load nothing is ever hidden.
+ *   2. A rAF-throttled scroll handler reveals anything that has reached the
+ *      viewport, and the IntersectionObserver is only the optimisation that
+ *      makes the fade start slightly early. A fast flick-scroll cannot leave
+ *      copy stranded at opacity 0 — invisible words on a sales page.
+ *   3. A one-shot failsafe covers the case where the page is resized, printed,
+ *      or restored from bfcache without a scroll event.
+ *   4. Everything is revealed before printing, because nobody wants a blank
+ *      quote when they print the page to read it.
+ */
 export function initReveal(): void {
   const targets = $$<HTMLElement>('[data-reveal]');
   if (!targets.length) return;
 
+  const showAll = (): void => targets.forEach((el) => el.classList.add('is-visible'));
+
   if (prefersReducedMotion() || !('IntersectionObserver' in window)) {
-    targets.forEach((el) => el.classList.add('is-visible'));
+    showAll();
     return;
   }
+
+  /** Reveals every target that has reached or passed the bottom of the viewport. */
+  const revealReached = (): void => {
+    const limit = window.innerHeight;
+    for (const el of targets) {
+      if (el.classList.contains('is-visible')) continue;
+      if (el.getBoundingClientRect().top < limit) el.classList.add('is-visible');
+    }
+  };
+
+  let queued = false;
+  const onScroll = (): void => {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(() => {
+      queued = false;
+      revealReached();
+    });
+  };
 
   const io = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
-        (entry.target as HTMLElement).classList.add('is-visible');
+        entry.target.classList.add('is-visible');
         io.unobserve(entry.target);
       });
     },
-    { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
+    // A positive bottom margin starts the fade before the element is fully on
+    // screen, so scrolling never reveals transparent text.
+    { rootMargin: '0px 0px -8% 0px', threshold: 0 },
   );
 
   targets.forEach((el) => io.observe(el));
+
+  // Rule 2 — the guarantee. Cheap, passive, and does not depend on the
+  // observer firing at all.
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
+  revealReached();
+
+  // Rule 3 — covers print, bfcache restore, and anything else that changes the
+  // layout without a scroll.
+  window.setTimeout(showAll, 3000);
+  window.addEventListener('beforeprint', showAll);
 }
 
 /* --------------------------------------------------- animated hero paint -- */

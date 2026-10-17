@@ -11,59 +11,14 @@
  * Requires:  npm install -D playwright && npx playwright install chromium
  */
 import { chromium } from 'playwright';
-import { createServer } from 'node:http';
-import { readFile, mkdir, stat } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
-import { join, extname, dirname, resolve } from 'node:path';
+import { mkdir } from 'node:fs/promises';
+import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { serve, BASE_PATH } from './qa-server.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SITE = join(ROOT, '_site');
 const SHOTS = join(ROOT, '.qa-screenshots');
-const PORT = 8123;
-
-const MIME = {
-  '.html': 'text/html; charset=utf-8',
-  '.css': 'text/css; charset=utf-8',
-  '.js': 'text/javascript; charset=utf-8',
-  '.woff2': 'font/woff2',
-  '.svg': 'image/svg+xml',
-  '.png': 'image/png',
-  '.webp': 'image/webp',
-  '.avif': 'image/avif',
-  '.jpg': 'image/jpeg',
-  '.xml': 'application/xml',
-  '.txt': 'text/plain',
-};
-
-if (!existsSync(SITE)) {
-  console.error('\n  No _site folder. Run `npm run build` first.\n');
-  process.exit(1);
-}
-
-/* -------------------------------------------------------- static server --- */
-const server = createServer(async (req, res) => {
-  try {
-    const url = decodeURIComponent(req.url.split('?')[0]);
-    let file = join(SITE, url);
-    if (existsSync(file) && (await stat(file)).isDirectory()) file = join(file, 'index.html');
-    if (!existsSync(file)) {
-      const fallback = join(SITE, '404.html');
-      res.writeHead(404, { 'content-type': MIME['.html'] });
-      return res.end(await readFile(fallback));
-    }
-    res.writeHead(200, { 'content-type': MIME[extname(file)] || 'application/octet-stream' });
-    res.end(await readFile(file));
-  } catch {
-    res.writeHead(500).end('error');
-  }
-});
-
-await new Promise((r) => server.listen(PORT, r));
-await mkdir(SHOTS, { recursive: true });
-
-const base = `http://localhost:${PORT}`;
-const browser = await chromium.launch();
 
 let failures = 0;
 const fail = (m) => { failures++; console.log(`  [FAIL] ${m}`); };
@@ -176,8 +131,42 @@ const AUDIT = () => {
 
   return issues;
 };
+const server = await serve(SITE, BASE_PATH);
+const base = server.url;
+const browser = await chromium.launch();
+await mkdir(SHOTS, { recursive: true });
 
-console.log('\nVISUAL + ACCESSIBILITY QA\n');
+console.log(`\nVISUAL + ACCESSIBILITY QA   (base path ${BASE_PATH})\n`);
+
+/**
+ * Scrolls the whole page so the scroll-reveal animations finish, then returns
+ * to the top. Without this a fullPage screenshot captures sections that are
+ * still at opacity 0, which looks exactly like the "half the page is blank"
+ * outage this check exists to catch.
+ *
+ * Any element still transparent after this is a real bug and is reported.
+ */
+async function settleReveals(page) {
+  return page.evaluate(async () => {
+    // `behavior: 'instant'` is essential: the site sets
+    // `html { scroll-behavior: smooth }`, so a rapid series of scrollTo calls
+    // would each start a new smooth animation, interrupt the last, and never
+    // actually reach the bottom of the page.
+    const step = Math.round(window.innerHeight * 0.7);
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+
+    for (let y = 0; y <= max; y += step) {
+      window.scrollTo({ top: y, behavior: 'instant' });
+      await new Promise((r) => setTimeout(r, 80));
+    }
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    await new Promise((r) => setTimeout(r, 400));
+
+    return [...document.querySelectorAll('[data-reveal]')]
+      .filter((el) => Number(getComputedStyle(el).opacity) < 0.9)
+      .map((el) => el.className || el.tagName);
+  });
+}
 
 for (const [name, path] of PAGES) {
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 }, deviceScaleFactor: 1 });
@@ -189,11 +178,16 @@ for (const [name, path] of PAGES) {
   page.on('response', (r) => { if (r.status() >= 400) badResponses.push(`${r.status()} ${r.url()}`); });
 
   await page.goto(base + path, { waitUntil: 'networkidle' });
+  const stuckReveals = await settleReveals(page);
 
   await page.screenshot({ path: join(SHOTS, `${name}-desktop.png`), fullPage: true });
 
   const issues = await page.evaluate(AUDIT);
   const label = `/${name}`.padEnd(22);
+
+  // Content stuck at opacity 0 is invisible copy on a sales page — the exact
+  // failure the scroll-reveal failsafe in src/js/components/gallery.ts prevents.
+  stuckReveals.forEach((cls) => issues.push(`content stuck invisible after scrolling: ${cls}`));
 
   // The 404 page is SUPPOSED to 404 — only flag sub-resources there.
   const subResources = badResponses.filter((b) => !b.includes(name === 'notfound' ? 'no-such-page' : ' '));
@@ -295,7 +289,7 @@ console.log('\nForm behaviour (mobile)');
 }
 
 await browser.close();
-server.close();
+await server.close();
 
 console.log('\n' + '='.repeat(60));
 if (failures === 0) {

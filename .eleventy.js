@@ -16,7 +16,74 @@ import { load as loadYaml } from 'js-yaml';
 // SafeString is exported from nunjucks' runtime namespace, not the top level.
 const { SafeString } = nunjucks.runtime;
 
+/**
+ * BASE PATH — the single most important setting in this file.
+ *
+ * GitHub Pages serves a *project* site from  https://<user>.github.io/<repo>/
+ * so a root-absolute path like /assets/css/main.css resolves to the DOMAIN
+ * root, not the repo folder, and returns 404. Every stylesheet, script, font
+ * and image silently disappears and the site renders unstyled with no JS.
+ *
+ * So the base path is explicit and switchable:
+ *
+ *   SITE_BASE_PATH=/ssdeol/   →  testing at nirmanpreet.github.io/ssdeol/
+ *   SITE_BASE_PATH=/          →  live at ssdeol.com.au (custom domain)
+ *
+ * The deploy workflow sets this. Everything below uses it, so switching to the
+ * domain later is a one-line change and nothing else moves.
+ */
+const basePath = process.env.SITE_BASE_PATH ?? '/ssdeol/';
+
 export default function (eleventyConfig) {
+  // Every absolute URL in a template is prefixed with this.
+  eleventyConfig.addGlobalData('basePath', basePath);
+
+  // ---------------------------------------------------------------------
+  // BASE PATH REWRITE — do not remove.
+  //
+  // GitHub Pages serves a project site from /<repo>/, so a root-absolute URL
+  // like /assets/css/main.css resolves to the DOMAIN root and 404s. The site
+  // then renders completely unstyled with no JavaScript, and nothing in the
+  // build output complains.
+  //
+  // This rewrites every root-absolute href/src in the finished HTML so it
+  // works at both github.io/<repo>/ and a custom domain. Verified by
+  // `npm run qa:basepath`.
+  // ---------------------------------------------------------------------
+  eleventyConfig.addTransform('prefixAbsoluteUrls', function (content) {
+    // Nothing to do when the site is served from the domain root.
+    if (basePath === '/') return content;
+    if (!content || !/<\/html>/.test(content)) return content;
+
+    const toUrl = (value) => {
+      if (!value.startsWith('/')) return value;      // relative, absolute URL, tel:, mailto:…
+      if (value.startsWith('//')) return value;      // protocol-relative
+      if (value === '/') return basePath;            // the homepage link
+      if (value.startsWith(basePath)) return value;  // already done
+      return basePath.replace(/\/$/, '') + value;
+    };
+
+    // Only href/src/srcset attribute values are touched. Template output
+    // cannot contain an unescaped double quote inside an attribute, so a
+    // targeted replace here is safe — and unlike a DOM pass it cannot fail to
+    // import on a CommonJS/ESM boundary.
+    const prefixAttribute = (value) => {
+      const trimmed = value.trim();
+      const prefixed = toUrl(trimmed);
+      // Preserve whatever whitespace separated the leading value.
+      return value.replace(trimmed, prefixed);
+    };
+
+    return content
+      // srcset holds one or more "url [descriptor]" pairs separated by commas.
+      .replace(/\bsrcset="([^"]*)"/g, (_m, value) =>
+        `srcset="${value
+          .split(',')
+          .map((part) => prefixAttribute(part))
+          .join(',')}"`
+      )
+      .replace(/\b(href|src)="([^"]*)"/g, (match, attr, value) => `${attr}="${prefixAttribute(value)}"`);
+  });
   // ---------------------------------------------------------------------
   // YAML data files. IMPORTANT.
   //
@@ -138,9 +205,16 @@ export default function (eleventyConfig) {
       input: '_content',
       output: '_site',
     },
+    // Publishes under the repo subfolder on github.io; '/' once the custom
+    // domain is attached. See SITE_BASE_PATH at the top of this file.
+    pathPrefix: basePath,
+    // Rewrites EVERY root-absolute URL in the built HTML — stylesheets, links,
+    // scripts, fonts, images — to include the base path. This is the reliable
+    // way to support both github.io/<repo>/ and a custom domain from one
+    // source; doing it by hand in templates always misses something.
+    htmlBaseUrl: basePath,
     templateFormats: ['md', 'njk', 'html'],
     markdownTemplateEngine: 'njk',
     htmlTemplateEngine: 'njk',
-    pathPrefix: '/',
   };
 }

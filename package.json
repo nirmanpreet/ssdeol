@@ -17,8 +17,10 @@
     "build:js": "node tools/build-js.mjs",
     "build:js:watch": "node tools/build-js.mjs --watch",
     "qa:calculator": "node tools/qa-calculator.mjs",
-    "qa:all": "npm run check && npm run qa:markdown && npm run qa:visual && npm run qa:calculator",
-    "qa": "npm run qa:all"
+    "qa:all": "npm run check && npm run qa:markdown && npm run qa:basepath && npm run qa:assets && npm run qa:visual && npm run qa:calculator",
+    "qa": "npm run qa:all",
+    "qa:assets": "node tools/qa-assets.mjs",
+    "qa:basepath": "node tools/check-base-path.mjs"
   },
   "keywords": [],
   "author": "SS Deol Enterprises Pty Ltd",

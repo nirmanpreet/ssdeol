@@ -13,12 +13,11 @@
  *      for bigger / harder / out-of-hours jobs, and always show its caveats.
  */
 import { chromium } from 'playwright';
-import { createServer } from 'node:http';
-import { readFile } from 'node:fs/promises';
-import { existsSync, statSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
-import { join, extname, dirname, resolve } from 'node:path';
+import { readFileSync, writeFileSync, rmSync } from 'node:fs';
+import { join, dirname, resolve } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { serve, BASE_PATH } from './qa-server.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SITE = join(ROOT, '_site');
@@ -26,29 +25,15 @@ const SITE = join(ROOT, '_site');
 // entry nor its package.json, so resolve the command from node_modules directly.
 const ELEVENTY_CMD = join(ROOT, 'node_modules/@11ty/eleventy/cmd.cjs');
 const PRICING = join(ROOT, '_content/_data/pricing.yml');
-const PORT = 8126;
-
-const MIME = {
-  '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript',
-  '.woff2': 'font/woff2', '.svg': 'image/svg+xml', '.png': 'image/png',
-  '.webp': 'image/webp', '.avif': 'image/avif', '.xml': 'application/xml',
-  '.txt': 'text/plain',
-};
 
 let failures = 0;
 const fail = (m) => { failures++; console.log(`  [FAIL] ${m}`); };
 const ok = (m) => console.log(`  [ OK ] ${m}`);
 
-const server = createServer(async (req, res) => {
-  const url = decodeURIComponent(req.url.split('?')[0]);
-  let file = join(SITE, url);
-  if (existsSync(file) && statSync(file).isDirectory()) file = join(file, 'index.html');
-  if (!existsSync(file)) { res.writeHead(404); return res.end('not found'); }
-  res.writeHead(200, { 'content-type': MIME[extname(file)] || 'application/octet-stream' });
-  res.end(await readFile(file));
-});
-await new Promise((r) => server.listen(PORT, r));
-const base = `http://localhost:${PORT}`;
+// Same base path the real deployment uses — serving at the wrong base is what
+// made the live site render unstyled, so the harness must mirror it.
+const server = await serve(SITE, BASE_PATH);
+const base = server.url;
 
 const originalPricing = readFileSync(PRICING, 'utf8');
 const browser = await chromium.launch();
@@ -99,7 +84,7 @@ try {
   setConfigured(false);
   {
     const { page, errors } = await newPage();
-    await page.goto(`${base}/contact/`, { waitUntil: 'networkidle' });
+    await page.goto(`${base}contact/`, { waitUntil: 'networkidle' });
 
     if (await page.isVisible('[data-calc-form]')) fail('calculator visible with no rates configured');
     else ok('calculator is hidden');
@@ -123,7 +108,7 @@ try {
   setConfigured(true);
   {
     const { page, errors } = await newPage();
-    await page.goto(`${base}/contact/`, { waitUntil: 'networkidle' });
+    await page.goto(`${base}contact/`, { waitUntil: 'networkidle' });
 
     if (!(await page.isVisible('[data-calc-form]'))) {
       fail('calculator did not appear after enabling rates');
@@ -207,7 +192,7 @@ try {
   writeFileSync(PRICING, originalPricing);
   rebuild();
   await browser.close();
-  server.close();
+  await server.close();
 }
 
 console.log('\n' + '='.repeat(58));

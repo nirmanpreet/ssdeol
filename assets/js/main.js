@@ -316,10 +316,27 @@
   function initReveal() {
     const targets = $$("[data-reveal]");
     if (!targets.length) return;
+    const showAll = () => targets.forEach((el) => el.classList.add("is-visible"));
     if (prefersReducedMotion() || !("IntersectionObserver" in window)) {
-      targets.forEach((el) => el.classList.add("is-visible"));
+      showAll();
       return;
     }
+    const revealReached = () => {
+      const limit = window.innerHeight;
+      for (const el of targets) {
+        if (el.classList.contains("is-visible")) continue;
+        if (el.getBoundingClientRect().top < limit) el.classList.add("is-visible");
+      }
+    };
+    let queued = false;
+    const onScroll = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        revealReached();
+      });
+    };
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -328,9 +345,16 @@
           io.unobserve(entry.target);
         });
       },
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.08 }
+      // A positive bottom margin starts the fade before the element is fully on
+      // screen, so scrolling never reveals transparent text.
+      { rootMargin: "0px 0px -8% 0px", threshold: 0 }
     );
     targets.forEach((el) => io.observe(el));
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    revealReached();
+    window.setTimeout(showAll, 3e3);
+    window.addEventListener("beforeprint", showAll);
   }
   function initPaintStroke() {
     var _a;
