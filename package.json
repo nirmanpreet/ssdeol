@@ -21,7 +21,8 @@
     "qa": "npm run qa:all",
     "qa:assets": "node tools/qa-assets.mjs",
     "qa:basepath": "node tools/check-base-path.mjs",
-    "qa:live": "node tools/qa-live.mjs"
+    "qa:live": "node tools/qa-live.mjs",
+    "qa:local": "node tools/qa-live.mjs http://localhost:8080/ssdeol"
   },
   "keywords": [],
   "author": "SS Deol Enterprises Pty Ltd",

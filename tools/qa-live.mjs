@@ -1,16 +1,24 @@
 /**
- * Final check against the REAL deployed site on GitHub Pages.
+ * Checks any deployed or local build in a real browser.
  *
- * Run after any deploy:  node tools/qa-live.mjs
+ *   node tools/qa-live.mjs                                    → production
+ *   node tools/qa-live.mjs http://localhost:8080/ssdeol       → dev server
+ *   SITE_URL=... node tools/qa-live.mjs                       → env var
  *
- * Loads the production URL in a browser rather than a local server, because
- * the failure this guards against only ever appears in production — a project
- * site served from /<repo>/ where root-absolute asset paths resolve to the
- * domain root and 404.
+ * Run against production after every deploy: it asserts the stylesheet
+ * applied, the JavaScript ran, nothing 404s, no content is stuck invisible,
+ * the calculator is still honestly disabled, and no internal notes leaked.
+ *
+ * It loads the page rather than reading the HTML because the outage this guards
+ * against produced perfectly correct HTML that referenced assets which 404'd —
+ * only a browser notices.
  */
 import { chromium } from 'playwright';
 
-const BASE = process.env.SITE_URL ?? 'https://nirmanpreet.github.io/ssdeol';
+const DEFAULT_PRODUCTION = 'https://nirmanpreet.github.io/ssdeol';
+const arg = process.argv.find((a) => a.startsWith('http'));
+const BASE = (arg ?? process.env.SITE_URL ?? DEFAULT_PRODUCTION).replace(/\/$/, '');
+const IS_LOCAL = /localhost|127\.0\.0\.1/.test(BASE);
 
 let failures = 0;
 const fail = (m) => { failures++; console.log(`  [FAIL] ${m}`); };
@@ -24,15 +32,17 @@ const bad = [];
 page.on('pageerror', (e) => errors.push(e.message));
 page.on('console', (m) => {
   const t = m.text();
-  // Web3Forms refuses to run its captcha on localhost by design; on production
-  // it should be running, so this stays a real failure here.
+  // Web3Forms refuses to run its captcha on localhost by design, and logs it as
+  // a console error. That is expected locally and is a real failure in
+  // production, so it is only ignored for local targets.
+  if (IS_LOCAL && /localhost detected/i.test(t)) return;
   if (m.type() === 'error') errors.push(t);
 });
 page.on('response', (r) => {
   if (r.status() >= 400 && !r.url().includes('favicon')) bad.push(`${r.status()} ${r.url()}`);
 });
 
-console.log(`\nLIVE SITE QA   ${BASE}\n`);
+console.log(`\nSITE QA   ${BASE}\n`);
 
 await page.goto(BASE + '/', { waitUntil: 'networkidle' });
 
@@ -94,12 +104,10 @@ const calc = await page.evaluate(() => ({
 }));
 if (calc.formVisible === false && calc.figureCount === 0) ok('calculator is correctly OFF — no price invented');
 else fail(`calculator is live with unconfigured placeholder rates (figures: ${calc.figureCount})`);
-if (calc.web3forms) ok('Web3Forms spam script loaded');
+if (calc.web3forms) ok('Web3Forms spam script present');
 else fail('Web3Forms spam script missing — the form has no spam protection');
 
-// 7. Internal notes must never leak. Genuine [PLACEHOLDER] tokens are a known
-//    pre-launch blocker (the owner has not supplied contact details yet), so
-//    they are reported separately rather than buried among real regressions.
+// 7. Internal notes must never leak in production.
 const LEAKS = [
   [/site owner/gi, 'internal note'],
   [/draft:\s*true/gi, 'draft note'],
@@ -108,27 +116,42 @@ const LEAKS = [
 ];
 const seen = new Set();
 const placeholders = new Set();
-let pages = 0;
 
 for (const p of ['/', '/services/', '/about/', '/projects/', '/contact/', '/service-areas/', '/privacy/']) {
   const t = await (await fetch(BASE + p, { headers: { 'user-agent': 'Mozilla/5.0' } })).text();
-  pages++;
+
+  if (IS_LOCAL) {
+    // The dev server deliberately renders the "note for the site owner" block
+    // (it is gated behind isLocal). That is correct behaviour here — confirm it
+    // is present rather than treating it as a leak.
+    continue;
+  }
+
   for (const [re, label] of LEAKS) if (re.test(t)) seen.add(`${label} on ${p}`);
   for (const m of t.matchAll(/\[PLACEHOLDER[^:\]]*:?\s*([^\]]{0,40})/g)) {
     placeholders.add(m[1].trim().replace(/[",].*$/, ''));
   }
 }
 
-if (seen.size) [...seen].forEach((s) => fail(`leaked ${s}`));
-else ok('no internal notes, stack jargon or config references on any public page');
-
-if (placeholders.size) {
+if (IS_LOCAL) {
+  const projects = await (await fetch(BASE + '/projects/', { headers: { 'user-agent': 'Mozilla/5.0' } })).text();
+  const notesVisible = /site owner/i.test(projects);
   console.log('');
-  console.log('  OUTSTANDING (pre-launch, tracked in TO-FILL-IN-BEFORE-LAUNCH.md):');
-  [...placeholders].forEach((p) => console.log(`    · ${p}`));
-  console.log(`    The site is LIVE but every "Call now" button still dials a placeholder.`);
+  console.log(`  Local dev server: the "note for the site owner" block on /projects/ is`);
+  console.log(`  ${notesVisible ? 'visible' : 'NOT visible'}. That is intentional — it is gated behind`);
+  console.log('  isLocal and never reaches the published site.');
 } else {
-  ok('no placeholder contact details remain — ready to launch');
+  if (seen.size) [...seen].forEach((s) => fail(`leaked ${s}`));
+  else ok('no internal notes, stack jargon or config references on any public page');
+
+  if (placeholders.size) {
+    console.log('');
+    console.log('  OUTSTANDING (pre-launch, tracked in TO-FILL-IN-BEFORE-LAUNCH.md):');
+    [...placeholders].forEach((p) => console.log(`    · ${p}`));
+    console.log('    Every "Call now" button still dials a placeholder.');
+  } else {
+    ok('no placeholder contact details remain — ready to launch');
+  }
 }
 
 await browser.close();
