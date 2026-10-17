@@ -64,8 +64,15 @@ jobs:
       - name: Install the tools
         run: npm ci
 
+      # Compiles src/js/*.ts -> assets/js/main.js with esbuild, then builds the
+      # pages. Both steps must run here — the TypeScript is the source of truth,
+      # so the site must never be published from a stale bundle.
       - name: Build the website
-        run: npx eleventy
+        run: npm run build
+
+      - name: Type-check the scripts
+        run: npx tsc --noEmit
+        continue-on-error: true
 
       # These steps FAIL the deploy if something is wrong — a broken link, a
       # page with no title, an image with no description, or page markup that

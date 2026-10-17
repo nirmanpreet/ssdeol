@@ -5,7 +5,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "eleventy",
+    "build": "node tools/build-js.mjs && eleventy",
     "start": "eleventy --serve",
     "debug": "DEBUG=Eleventy* eleventy",
     "build:logo": "node tools/build-logo.mjs",
@@ -13,16 +13,23 @@
     "check": "node tools/check-build.mjs",
     "qa:visual": "node tools/qa-visual.mjs",
     "qa:markdown": "node tools/check-markdown-mangling.mjs",
-    "fix:layout": "node tools/fix-markdown-mangling.mjs && node tools/fix-loop-whitespace.mjs"
+    "fix:layout": "node tools/fix-markdown-mangling.mjs && node tools/fix-loop-whitespace.mjs",
+    "build:js": "node tools/build-js.mjs",
+    "build:js:watch": "node tools/build-js.mjs --watch",
+    "qa:calculator": "node tools/qa-calculator.mjs",
+    "qa:all": "npm run check && npm run qa:markdown && npm run qa:visual && npm run qa:calculator",
+    "qa": "npm run qa:all"
   },
   "keywords": [],
   "author": "SS Deol Enterprises Pty Ltd",
   "license": "UNLICENSED",
   "devDependencies": {
     "@11ty/eleventy": "^3.1.7",
+    "esbuild": "^0.28.2",
     "js-yaml": "^5.5.0",
     "playwright": "^1.64.1",
-    "sharp": "^0.35.5"
+    "sharp": "^0.35.5",
+    "typescript": "^7.0.2"
   },
   "engines": {
     "node": ">=18"

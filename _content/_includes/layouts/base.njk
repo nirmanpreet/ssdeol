@@ -4,6 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  {# Marks that JavaScript is available, BEFORE anything renders. The scroll
+     animations use this so that if the script file fails to load, content is
+     still visible rather than stuck at opacity 0. Two bytes of insurance. #}
+  <script>document.documentElement.classList.add('js')</script>
+
   <title>{% if title %}{{ title }} | {{ site.titleSuffix }}{% else %}{{ site.name }} — {{ site.tagline }}{% endif %}</title>
   <meta name="description" content="{{ description | default(site.defaultMetaDescription) | strip_newlines | truncate(300) }}">
 

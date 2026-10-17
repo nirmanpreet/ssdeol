@@ -108,6 +108,13 @@ export default function (eleventyConfig) {
   // Template helpers that must never appear on the live site.
   eleventyConfig.addGlobalData('isLocal', process.env.ELEVENTY_RUN_MODE === 'serve' || !!process.env.LOCAL_BUILD);
 
+  // Serialises a data file to JSON for a data-attribute / inline script.
+  // Used by the quote calculator, which needs the rate table client-side.
+  // `</script>` is escaped so the output can never terminate the script tag.
+  eleventyConfig.addFilter('jsonify', (value) =>
+    JSON.stringify(value ?? null).replace(/</g, '\\u003c')
+  );
+
   // Project files live in _content/projects/*.md and become individual pages.
   // `tags: project` is what lets /projects/ collect them and render the gallery.
   eleventyConfig.addCollection('projects', (api) =>

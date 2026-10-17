@@ -83,6 +83,11 @@ p, li { max-width: 68ch; }
 h1, h2, h3, h4 { max-width: 22ch; line-height: 1.08; }
 h1, h2, h3, h4, .btn, .trust-strip__value { font-family: var(--font-head); font-weight: 700; }
 
+/* The `hidden` attribute must win over any component `display` rule.
+   Without this, `.calc { display: grid }` beats the user-agent's
+   `[hidden] { display: none }` and a hidden element stays visible. */
+[hidden] { display: none !important; }
+
 /* Visible focus for keyboard users only — never remove without a replacement. */
 :focus-visible {
   outline: 3px solid var(--gold);
@@ -612,6 +617,16 @@ h4 { font-size: var(--step-1); color: var(--ink); margin-bottom: .35rem; }
 }
 .notice p + p { margin-top: .6rem; }
 .notice strong { color: var(--ink); }
+/* A .notice has a LIGHT background, so it must force its own dark text when
+   it sits inside one of the dark sections — otherwise inherited white text
+   renders invisible on the pale panel. */
+.section--calc .notice,
+.section--green .notice,
+.hero .notice { color: var(--body); }
+.section--calc .notice strong,
+.section--green .notice strong { color: var(--ink); }
+.section--calc .notice a,
+.section--green .notice a { color: var(--green); }
 
 /* ------------------------------------------------------------ placeholder -- */
 /* Anything the site owner has not filled in yet is wrapped in .ph so it is
@@ -687,6 +702,98 @@ h4 { font-size: var(--step-1); color: var(--ink); margin-bottom: .35rem; }
 }
 .compare input[type="range"]:focus-visible ~ .compare__handle::after,
 .compare:focus-within .compare__handle::after { background: var(--ink); box-shadow: 0 0 0 3px var(--gold); }
+
+/* ----------------------------------------------------- quote calculator --
+   Deliberately plain and deliberately honest. The number is the loudest thing
+   on the panel; the caveats sit right beneath it and cannot be missed. */
+.section--calc { background: var(--green-deep); color: var(--white); }
+.section--calc h2 { color: var(--white); }
+.section--calc .eyebrow { color: var(--gold); }
+.section--calc .lede { color: rgba(255, 255, 255, .84); }
+.section--calc .hint { color: rgba(255, 255, 255, .6); }
+
+.calc {
+  display: grid; gap: clamp(1.5rem, 3vw, 2.5rem);
+  background: rgba(255, 255, 255, .05);
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: var(--radius);
+  padding: clamp(1.3rem, 3vw, 2rem);
+}
+.calc__controls { display: grid; gap: 1.1rem; }
+@media (min-width: 720px) { .calc__controls { grid-template-columns: 1fr 1fr; } }
+.calc__controls .btn { grid-column: 1 / -1; justify-self: start; }
+
+.calc .field label { color: var(--white); font-weight: 600; }
+.calc .field select,
+.calc .field input { background: rgba(255, 255, 255, .96); color: var(--ink); border-color: transparent; }
+
+.calc__output {
+  background: var(--gold); color: var(--ink);
+  border-radius: var(--radius); padding: 1.5rem;
+  align-self: start;
+}
+.calc__eyebrow {
+  font-family: var(--font-head); font-size: .8rem; letter-spacing: .14em;
+  text-transform: uppercase; opacity: .8; margin-bottom: .3rem;
+}
+.calc__figure {
+  font-family: var(--font-head); font-weight: 700;
+  font-size: clamp(1.9rem, 1.4rem + 2.4vw, 3rem);
+  line-height: 1.05; margin-bottom: .4rem;
+}
+.calc__figure span { opacity: .55; font-weight: 400; }
+.calc__basis { font-size: .95rem; opacity: .85; margin-bottom: .9rem; }
+.calc__caveats { list-style: none; padding: 0; margin: 0; display: grid; gap: .35rem; }
+.calc__caveats li {
+  max-width: none; font-size: .84rem; opacity: .78;
+  padding-left: 1.1rem; position: relative;
+}
+.calc__caveats li::before { content: "—"; position: absolute; left: 0; opacity: .6; }
+
+.calc__capture {
+  margin-top: 2rem; padding: clamp(1.4rem, 3vw, 2.2rem);
+  background: rgba(255, 255, 255, .06);
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: var(--radius);
+}
+.calc__capture h3 { color: var(--white); font-size: var(--step-2); }
+.calc__capture-lede { color: rgba(255, 255, 255, .82); margin: .4rem 0 1.2rem; max-width: 56ch; }
+
+@media (min-width: 940px) { .calc { grid-template-columns: 1.1fr .9fr; align-items: start; } }
+
+/* ------------------------------------------------------------ hero art --
+   A roller stroke that draws itself on load. Decorative, so it is hidden from
+   assistive technology and suppressed entirely for reduced-motion visitors.
+   -------------------------------------------------------------------------- */
+.hero-art {
+  position: absolute;
+  right: -4%;
+  bottom: 2%;
+  width: min(58%, 640px);
+  height: auto;
+  color: var(--gold);
+  opacity: .26;
+  pointer-events: none;
+  z-index: -1;
+}
+.hero-art__stroke { transition: stroke-dashoffset 1.5s cubic-bezier(.4, 0, .2, 1); }
+.hero-art__stroke--thin { opacity: .55; }
+
+@media (max-width: 900px) { .hero-art { width: 90%; right: -18%; opacity: .2; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-art { display: none; }
+}
+
+/* ---------------------------------------------------------- scroll reveal --
+   Only ever an entrance animation. If JS fails the elements must be visible,
+   so the pre-JS state is hidden ONLY when the class is present AND JS runs. */
+[data-reveal] { opacity: 1; }
+html.js [data-reveal] { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s cubic-bezier(.2,.7,.3,1); }
+html.js [data-reveal].is-visible { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  html.js [data-reveal] { opacity: 1; transform: none; }
+}
 
 /* ------------------------------------------------------------------ print -- */
 @media print {

@@ -174,13 +174,17 @@ description: >-
           </p>
         </div>
 
-        {# --- Anti-spam challenge --------------------------------------------
-           Web3Forms provides hCaptcha free of charge on every plan (Google
-           reCAPTCHA and Cloudflare Turnstile are paid extras). The widget only
-           loads from the provider's own domain when someone actually uses the
-           form, so it costs nothing on ordinary page views. ----------------- #}
+        {# --- Anti-spam -----------------------------------------------------------
+           Web3Forms provides hCaptcha free of charge on every plan. It works
+           by THEIR script injecting the sitekey and rendering the widget — so
+           loading js.hcaptcha.com directly fails with "Missing sitekey" and
+           leaves the form unprotected. This file is required.
+
+           Load it only when hCaptcha is actually switched on, so the free
+           plan's included protection is preserved without paying for
+           reCAPTCHA or Cloudflare Turnstile. ------------------------------- #}
         <div class="h-captcha" data-captcha="true"></div>
-        <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+        <script src="https://web3forms.com/client/script.js" async defer></script>
       </form>
     </div>
 
@@ -227,6 +231,8 @@ description: >-
 
   </div>
 </section>
+{% include "partials/calculator.njk" %}
+
 <section class="section section--pale">
   <div class="wrap">
     <div class="section-head">

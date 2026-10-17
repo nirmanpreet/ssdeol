@@ -16,6 +16,26 @@ description: >-
    ========================================================================== #}
 
 <section class="hero">
+  {# A roller stroke that draws itself on load. Pure SVG and CSS — it costs a
+     few hundred bytes, no images, no library. Respects reduced-motion via the
+     .hero-art rules and initPaintStroke() in src/js/components/gallery.ts. #}
+  <svg class="hero-art" viewBox="0 0 600 200" aria-hidden="true" focusable="false" preserveAspectRatio="none">
+    <path class="hero-art__stroke"
+          data-hero-stroke
+          d="M8 150 C 120 60, 240 190, 360 96 S 560 40, 592 92"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="14"
+          stroke-linecap="round"/>
+    <path class="hero-art__stroke hero-art__stroke--thin"
+          data-hero-stroke
+          d="M8 176 C 140 110, 260 200, 392 128 S 556 92, 592 132"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="6"
+          stroke-linecap="round"/>
+  </svg>
+
   <div class="wrap hero__inner">
     <div>
       <p class="eyebrow">Victorian commercial &amp; industrial painters</p>
@@ -66,7 +86,7 @@ description: >-
 </div>
 
 {# --------------------------------------------------------------- services #}
-<section class="section">
+<section class="section" data-reveal>
   <div class="wrap">
     <div class="section-head">
       <p class="eyebrow">What we do</p>
@@ -93,7 +113,7 @@ description: >-
 </section>
 
 {# ---------------------------------------------------------------- pillars #}
-<section class="section section--green">
+<section class="section section--green" data-reveal>
   <div class="wrap">
     <div class="section-head">
       <p class="eyebrow">Why SS Deol</p>
@@ -114,7 +134,7 @@ description: >-
 </section>
 
 {# ------------------------------------------------------- no-downtime block #}
-<section class="section section--pale">
+<section class="section section--pale" data-reveal>
   <div class="wrap split">
     <div>
       <p class="eyebrow">The bit everyone worries about</p>
@@ -142,7 +162,7 @@ description: >-
 </section>
 
 {# ------------------------------------------------------------- industries #}
-<section class="section">
+<section class="section" data-reveal>
   <div class="wrap split">
     <div>
       <p class="eyebrow">Who we work for</p>
@@ -162,7 +182,7 @@ description: >-
 </section>
 
 {# ------------------------------------------------------------------ steps #}
-<section class="section section--pale">
+<section class="section section--pale" data-reveal>
   <div class="wrap split split--start">
     <div>
       <p class="eyebrow">How it works</p>
@@ -184,7 +204,7 @@ description: >-
 </section>
 
 {# ------------------------------------------------------------- credentials #}
-<section class="section">
+<section class="section" data-reveal>
   <div class="wrap">
     <div class="section-head section-head--center">
       <p class="eyebrow">Credentials</p>

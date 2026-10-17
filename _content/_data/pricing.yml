@@ -1,0 +1,131 @@
+# ==============================================================================
+#  INSTANT QUOTE CALCULATOR — RATE TABLE
+# ==============================================================================
+#  ⚠️  THE NUMBERS BELOW ARE PLACEHOLDERS. THEY ARE NOT YOUR PRICES.       ⚠️
+#  ⚠️  The calculator refuses to show any figure until `configured: true`    ⚠️
+#  ⚠️  and you have replaced the rates. See TO-FILL-IN-BEFORE-LAUNCH.md.   ⚠️
+#
+#  HOW THIS WORKS
+#  --------------
+#  A visitor picks a service, a property type, a size and a timing. The site
+#  multiplies that together and shows a RANGE. It always says the range is
+#  indicative and that a site visit is needed — it is a tool for someone
+#  deciding whether to make contact, NOT a quote.
+#
+#  WHY A RANGE AND NEVER A SINGLE NUMBER
+#  -------------------------------------
+#  Because you genuinely cannot know the price until you have seen the surface
+#  and the access. Publishing one number would be a claim you cannot keep. The
+#  range is wide enough to be honest and tight enough to be useful.
+#
+#  HOW TO WORK OUT YOUR OWN RATES
+#  ------------------------------
+#  1. Take your last 10 jobs.
+#  2. Divide each invoice total by the floor/wall area involved.
+#  3. Take the median (the middle one), not the average — one bad job skews
+#     an average badly.
+#  4. Set `low` to roughly 0.8x that and `high` to about 1.4x it.
+#  5. Leave `minimum` at a mobilisation figure you would actually accept.
+#
+#  UNITS: dollars per square metre, excluding GST.
+# ==============================================================================
+
+# Set this to true ONLY once the rates below are your real numbers.
+configured: false
+
+rates:
+  - slug: commercial-repainting
+    # [PLACEHOLDER: enter your real $/m² range for interior + exterior repaints]
+    low: 22
+    high: 55
+    minimum: 3500
+
+  - slug: epoxy-floor-coatings
+    # [PLACEHOLDER: your real $/m² for industrial floor coatings]
+    low: 45
+    high: 120
+    minimum: 6000
+
+  - slug: line-marking
+    # [PLACEHOLDER: your real $/m² for line marking]
+    low: 6
+    high: 18
+    minimum: 1500
+
+  - slug: texture-coating
+    # [PLACEHOLDER: your real $/m² for texture coating / spray rendering]
+    low: 28
+    high: 75
+    minimum: 4500
+
+  - slug: structural-coatings
+    # [PLACEHOLDER: your real $/m² for structural steel / tilt-up coatings]
+    low: 35
+    high: 95
+    minimum: 5000
+
+  - slug: high-rise-rope-access
+    # [PLACEHOLDER: your real $/m² for rope access work — usually premium]
+    low: 55
+    high: 140
+    minimum: 7000
+
+  - slug: pre-construction
+    # [PLACEHOLDER: your real $/m² for new-build / fit-off painting]
+    low: 18
+    high: 48
+    minimum: 3000
+
+  - slug: waterproofing-repairs
+    # [PLACEHOLDER: your real $/m² for waterproofing and repair work]
+    low: 40
+    high: 130
+    minimum: 2500
+
+  - slug: maintenance-programmes
+    # [PLACEHOLDER: your real $/m² for a planned maintenance repaint]
+    low: 20
+    high: 45
+    minimum: 3500
+
+# ------------------------------------------------------------------------------
+#  PROPERTY MULTIPLIERS
+#  How much harder each property type is to work in. 1.0 = the baseline.
+#  A hospital-grade cleanability spec costs more than an office wall.
+# ------------------------------------------------------------------------------
+propertyFactors:
+  warehouse: 0.9          # big, straightforward, repetitive
+  factory: 1.1            # plant, access, safety constraints
+  office: 1.0             # the baseline
+  retail: 1.05            # shopfronts, public access, out-of-hours
+  strata: 1.15            # multiple owners, occupied, committees
+  education: 1.2          # child-safety coatings, out-of-hours only
+  aged-care: 1.25         # infection control, odour sensitivity, residents
+  hospitality: 1.15       # trading-hours restrictions
+  transport: 1.1
+  utility: 1.3            # specification-heavy, access-difficult
+
+# ------------------------------------------------------------------------------
+#  AFTER-HOURS PREMIUM
+#  Night and weekend work costs more in labour. Shutdown work often costs less
+#  per hour because you are not fighting a live site. Adjust to suit.
+# ------------------------------------------------------------------------------
+outOfHoursMultiplier: 1.25
+
+# ------------------------------------------------------------------------------
+#  SIZE BAND NOTES — shown under the size dropdown to set expectations
+# ------------------------------------------------------------------------------
+sizeNotes:
+  "250": "A small job. Usually a single area or a few rooms."
+  "1000": "A medium job. Around one floor of a typical office or warehouse."
+  "5000": "A large job. Worth a site visit before anything is committed."
+  "15000": "A very large job. We would plan this properly rather than quote from a website."
+  "50000": "A major project. Expect a formal scope and a written programme."
+
+# ------------------------------------------------------------------------------
+#  DISCLAIMERS — shown under every estimate. Keep these honest and keep them on.
+# ------------------------------------------------------------------------------
+disclaimers:
+  - Indicative only — not a quote.
+  - Final price depends on the condition of the substrate, access and preparation needed.
+  - We confirm everything in writing after a site visit.

@@ -1,0 +1,132 @@
+{# ============================================================================
+   INSTANT QUOTE CALCULATOR
+   ============================================================================
+   The highest-value tool on the site: it turns "I have no idea what this costs"
+   into a number in about twenty seconds, then captures the details.
+
+   HOW IT STAYS HONEST
+   -------------------
+   * Every rate comes from _data/pricing.yml, never from this template.
+   * If pricing.yml still says `configured: false`, the JavaScript refuses to
+     calculate anything and shows the plain enquiry form instead. The site will
+     never invent a price it cannot stand behind.
+   * The estimate is labelled INDICATIVE, lists what it excludes, and says a
+     site visit is required. It is not a quote and it does not claim to be.
+
+   TO TURN IT ON: fill in _data/pricing.yml and set `configured: true`.
+   ============================================================================ #}
+
+<section class="section section--calc" data-calculator>
+  {# Machine-readable configuration for the calculator. Deliberately a
+     JSON blob in a script tag rather than fetching a file — one less request
+     and it works offline once cached. #}
+  <script type="application/json" data-calculator-config hidden>{{ pricing | jsonify | safe }}</script>
+
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Cost checker</p>
+      <h2>What will it roughly cost?</h2>
+      <p class="lede">
+        Pick the job and get an indicative range in a few seconds. No obligation,
+        no sales call. We confirm everything in writing after a site visit.
+      </p>
+    </div>
+
+    {# ------------------------------------------------------------------ #}
+    {# Shown only while pricing.yml is unconfigured. The calculator stays   #}
+    {# hidden and this plain enquiry form is used instead.                  #}
+    {# ------------------------------------------------------------------ #}
+    <div data-calc-unconfigured hidden>
+      <div class="notice">
+        <p><strong>Not ready to publish prices yet.</strong> We do not publish
+        a price range until we have set our own rates, because an indicative
+        figure we cannot stand behind is worse than no figure at all.</p>
+        <p>Send us the details and you will have a written quote within 48
+        hours — that is faster than any calculator.</p>
+        <p><a href="/contact/">Go to the quote form</a></p>
+      </div>
+    </div>
+
+    {# ------------------------------------------------------------------ #}
+    {# CALCULATOR UI                                                      #}
+    {# ------------------------------------------------------------------ #}
+    <form class="calc" data-calc-form hidden>
+      <div class="calc__controls">
+        <div class="field">
+          <label for="calc-service">What needs doing?</label>
+          <select id="calc-service" data-calc="service">
+            {%- for s in services.services -%}
+            <option value="{{ s.slug }}">{{ s.title }}</option>
+            {%- endfor -%}
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="calc-property">Type of building</label>
+          <select id="calc-property" data-calc="property">
+            <option value="warehouse">Warehouse / distribution</option>
+            <option value="factory">Factory / manufacturing</option>
+            <option value="office">Office / commercial</option>
+            <option value="retail">Retail / shopfront</option>
+            <option value="strata">Strata / body corporate</option>
+            <option value="education">School / childcare</option>
+            <option value="aged-care">Aged care</option>
+            <option value="hospitality">Hospitality</option>
+            <option value="transport">Transport depot</option>
+            <option value="utility">Utility / energy</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="calc-size">Rough size</label>
+          <select id="calc-size" data-calc="size">
+            <option value="250">Under 250 m²</option>
+            <option value="1000" selected>250 – 1,000 m²</option>
+            <option value="5000">1,000 – 5,000 m²</option>
+            <option value="15000">5,000 – 15,000 m²</option>
+            <option value="50000">Over 15,000 m²</option>
+          </select>
+          <p class="hint" data-calc-sizenote></p>
+        </div>
+
+        <div class="field">
+          <label for="calc-timing">When can we work?</label>
+          <select id="calc-timing" data-calc="timing">
+            <option value="normal">During the day</option>
+            <option value="out-of-hours">After hours / weekends / shutdown</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="calc-area">Know the exact area? <span class="hint">(optional)</span></label>
+          <input type="number" id="calc-area" data-calc="area"
+                 min="1" step="1" inputmode="numeric" placeholder="e.g. 3200">
+          <p class="hint">In square metres. Leave blank to use the band above.</p>
+        </div>
+
+        <button class="btn btn--gold" type="submit">Show me the range</button>
+      </div>
+
+      {# Result panel. Populated by src/js/components/calculator.ts. #}
+      <div class="calc__output" data-calc-output role="status" aria-live="polite" hidden></div>
+
+      {# Carried into the enquiry form so the office knows what the visitor
+         was shown, without having to ask them or guess. #}
+      <input type="hidden" name="indicative_estimate" data-calc-summary>
+      <input type="hidden" name="indicative_area_m2" data-calc-area-value>
+    </form>
+
+    {# ------------------------------------------------------------------ #}
+    {# LEAD CAPTURE — shown once an estimate exists                       #}
+    {# ------------------------------------------------------------------ #}
+    <div data-calc-details class="calc__capture" hidden>
+      <h3>Want that in writing?</h3>
+      <p class="calc__capture-lede">
+        Send us the details and we will turn the range into a fixed written quote
+        within 48 hours — no obligation.
+      </p>
+      <p><a class="btn btn--green" href="/contact/">Get your free quote</a></p>
+    </div>
+
+  </div>
+</section>
